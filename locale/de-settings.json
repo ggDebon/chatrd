@@ -54,6 +54,24 @@
 			"one_line": "Einzeilig",
 			"horizontal": "Horizontal"
 		},
+		"animation": "Animation",
+		"animation_options": {
+			"default": "Standard",
+			"none": "Keine Animation"
+		},
+		"orientation": "Ausrichtung",
+		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Textausrichtung",
+		"text_alignment_options" : {
+			"left_to_right": "Von links nach rechts",
+			"right_to_left": "Von rechts nach links",
+			"centered": "Zentriert"
+		},
+		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Neue Nachrichten",
+		"new_messages_from_options": {
+			"top_to_bottom": "Von oben nach unten",
+			"bottom_to_top": "Von unten nach oben"
+		},
+		"orientation_warning": "Die Chat-Ausrichtung <strong>funktioniert nicht, wenn das Chat-Layout auf <u>Horizontal</u> eingestellt ist</strong>.",
 		"group_messages": "Chatnachrichten Gruppieren",
 		"group_messages_hint": "Aufeinanderfolgende Nachrichten desselben Nutzers werden gruppiert",
 		"avatars": "Avatare",

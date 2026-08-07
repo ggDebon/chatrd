@@ -80,11 +80,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=32",
-    nutting: "skin-nutting.css?nocache=32",
-    kimballs: "skin-kimballs.css?nocache=32",
-    bubbles: "skin-bubbles.css?nocache=32",
-    'star-wars': "skin-star-wars.css?nocache=32"
+    default: "skin-default.css?nocache=33",
+    nutting: "skin-nutting.css?nocache=33",
+    kimballs: "skin-kimballs.css?nocache=33",
+    bubbles: "skin-bubbles.css?nocache=33",
+    'star-wars': "skin-star-wars.css?nocache=33"
 };
 
 const skinFile = SKINS[skin] || SKINS.default;
@@ -140,7 +140,7 @@ if (chatField) {
 async function animateItemEntry(root, messageid) {
 	const dimensionProp = chatHorizontal ? 'Width' : 'Height';
 
-	if (document.hidden) {
+	if ((document.hidden) || (animation == "none")) {
 		const target = root.parentNode ?? root;
 		const wrapper = document.createElement('div');
 		wrapper.classList.add('chat-element-wrapper');

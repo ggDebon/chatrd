@@ -54,6 +54,24 @@
 			"one_line": "Jedna Linia",
 			"horizontal": "Poziomy"
 		},
+		"animation": "Animacja",
+		"animation_options": {
+			"default": "Domyślne",
+			"none": "Brak animacji"
+		},
+		"orientation": "Orientacja",
+		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Wyrównanie tekstu",
+		"text_alignment_options" : {
+			"left_to_right": "Od lewej do prawej",
+			"right_to_left": "Od prawej do lewej",
+			"centered": "Wyśrodkowane"
+		},
+		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Nowe wiadomości",
+		"new_messages_from_options": {
+			"top_to_bottom": "Od góry do dołu",
+			"bottom_to_top": "Od dołu do góry"
+		},
+		"orientation_warning": "Orientacja czatu <strong>nie będzie działać, jeśli Układ czatu jest ustawiony na <u>Poziomy</u></strong>.",
 		"group_messages": "Grupuj Wiadomości Czatu",
 		"group_messages_hint": "Kolejne wiadomości od tego samego użytkownika zostaną zgrupowane",
 		"avatars": "Awatary",

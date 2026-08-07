@@ -54,6 +54,24 @@
 			"one_line": "Iisang Linya",
 			"horizontal": "Horizontal"
 		},
+		"animation": "Animation",
+		"animation_options": {
+			"default": "Default",
+			"none": "Walang Animation"
+		},
+		"orientation": "Oryentasyon",
+		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Pagkakahanay ng Teksto",
+		"text_alignment_options" : {
+			"left_to_right": "Mula Kaliwa Pakanan",
+			"right_to_left": "Mula Kanan Pakaliwa",
+			"centered": "Nasa Gitna"
+		},
+		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Mga Bagong Mensahe",
+		"new_messages_from_options": {
+			"top_to_bottom": "Mula Taas Pababa",
+			"bottom_to_top": "Mula Baba Pataas"
+		},
+		"orientation_warning": "Ang Oryentasyon ng Chat <strong>ay hindi gagana kung ang Layout ng Chat ay naka-set sa <u>Horizontal</u></strong>.",
 		"group_messages": "Pagsamahin ang mga Mensahe sa Chat",
 		"group_messages_hint": "Pagsasamahin ang magkakasunod na mensahe mula sa parehong user",
 		"avatars": "Mga Avatar",

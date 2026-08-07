@@ -54,6 +54,24 @@
 			"one_line": "Ligne Unique",
 			"horizontal": "Horizontale"
 		},
+		"animation": "Animation",
+		"animation_options": {
+			"default": "Par défaut",
+			"none": "Aucune animation"
+		},
+		"orientation": "Orientation",
+		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Alignement du texte",
+		"text_alignment_options" : {
+			"left_to_right": "De gauche à droite",
+			"right_to_left": "De droite à gauche",
+			"centered": "Centré"
+		},
+		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Nouveaux messages",
+		"new_messages_from_options": {
+			"top_to_bottom": "De haut en bas",
+			"bottom_to_top": "De bas en haut"
+		},
+		"orientation_warning": "L'orientation du chat <strong>ne fonctionnera pas si la disposition du chat est réglée sur <u>Horizontal</u></strong>.",
 		"group_messages": "Grouper les Messages du Chat",
 		"group_messages_hint": "Les messages consécutifs du même utilisateur seront groupés",
 		"avatars": "Avatars",
