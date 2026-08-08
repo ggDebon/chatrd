@@ -77,6 +77,24 @@ const kickMessageHandlers = {
         if (isPusherConnected) return;
     },
 
+    'Kick.UserTimedOut': (response) => {
+        if (isPusherConnected) return;
+        kickUserBanned({
+            user: {
+                slug : data.user.name.toLowerCase()
+            }
+        });
+    },
+
+    'Kick.UserBanned': (response) => {
+        if (isPusherConnected) return;
+        kickUserBanned({
+            user: {
+                slug : data.user.name.toLowerCase()
+            }
+        });
+    },
+
     'Kick.ViewerCountUpdate': (response) => {
         kickUpdateStatistics(response.data);
     },
