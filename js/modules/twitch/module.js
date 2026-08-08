@@ -18,6 +18,7 @@ const showTwitchMassGiftedSubs          = getURLParam("showTwitchMassGiftedSubs"
 const showTwitchRewardRedemptions       = getURLParam("showTwitchRewardRedemptions", true);
 const showTwitchPowerUpRedemption       = getURLParam("showTwitchPowerUpRedemptions", true);
 const enableTwitchPowerUpEffects        = getURLParam("enableTwitchPowerUpEffects", false);
+const enableTwitchPowerUpNotifications  = getURLParam("enableTwitchPowerUpNotifications", true);
 const showTwitchRaids                   = getURLParam("showTwitchRaids", true);
 const showTwitchHypeTrain               = getURLParam("showTwitchHypeTrain", false);
 const showTwitchHypeTrainBar            = getURLParam("showTwitchHypeTrainBar", false);
@@ -676,6 +677,33 @@ async function twitchPowerUpRedemption(data) {
 
     if (showTwitchPowerUpRedemption == false) return;
 
+    let title;
+    let valueDesc = '';
+
+    const classes = ['twitch', 'power-up'];
+    const rotateDeg = (Math.random() * 60 - 30).toFixed(1) + 'deg';
+
+    switch (data.type) {
+        case "message_effect" :
+            title = tRD('twitch.reward_auto.message_effect');
+            if (enableTwitchPowerUpEffects) twitchChatMessageEffect(data);
+        break;
+
+        case "gigantify_an_emote" :
+            title = tRD('twitch.reward_auto.gigantify');
+            twitchChatMessageGiantEmote(data);
+        break;
+
+        case "celebration" :
+            title = tRD('twitch.reward_auto.celebration');
+            /*classes.push('small-gift');
+            valueDesc =  `<img style="--rotateGift: ${rotateDeg}" class="gift-image" src="${data.emote.imageUrl}" alt="${data.emote.text}">`;*/
+            if (enableTwitchPowerUpEffects) twitchChatOnScreenCelebration(data);
+        break;
+    }
+
+    if (!enableTwitchPowerUpNotifications) return;
+
     const template = eventTemplate;
 	const clone = template.content.cloneNode(true);
     const messageId = createRandomString(40);
@@ -693,32 +721,7 @@ async function twitchPowerUpRedemption(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'power-up'];
-
     header.remove();
-    
-
-    let title;
-    let image;
-
-    switch (data.type) {
-        case "message_effect" :
-            title = tRD('twitch.reward_auto.message_effect');
-            if (enableTwitchPowerUpEffects) twitchChatMessageEffect(data);
-        break;
-
-        case "gigantify_an_emote" :
-            title = tRD('twitch.reward_auto.gigantify');
-            twitchChatMessageGiantEmote(data);
-        break;
-
-        case "celebration" :
-            title = tRD('twitch.reward_auto.celebration');
-            image = ` <img src="${data.emote.imageUrl}">`;
-            classes.push('small-gift')
-            if (enableTwitchPowerUpEffects) twitchChatOnScreenCelebration(data);
-        break;
-    }
     
     const userLinkElement = user.querySelector('a');
     const userLink = `https://twitch.tv/${data.user.login}`;
@@ -728,10 +731,10 @@ async function twitchPowerUpRedemption(data) {
     userLinkElement.textContent = data.user.name;
     userLinkElement.title = `${data.user.name} @ ${userLink}`;
 
-    action.innerHTML = tRD('twitch.reward_action');
+    action.innerHTML = `${tRD('twitch.reward_action')} <strong>${title}</strong>`;
 
     const giftHtml = renderGiftEventSuffix({
-        image : `<strong>${title}</strong>`, 
+        image : `${valueDesc}`, 
         value : `<img src="js/modules/twitch/images/icon-powerups-bits.svg" alt="${title}"> ${data.bits}`
     });
 
