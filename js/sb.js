@@ -7,7 +7,7 @@ let speakerBotClient = null;
 const streamerBotStatus = {};
 const streamerBotServerAddress      = getURLParam("streamerBotServerAddress", "127.0.0.1");
 const streamerBotServerPort         = getURLParam("streamerBotServerPort", "8080");
-const showSpeakerbot                = getURLParam("showSpeakerbot", true);
+const showSpeakerbot                = getURLParam("showSpeakerbot", false);
 const speakerBotServerAddress       = getURLParam("speakerBotServerAddress", "127.0.0.1");
 const speakerBotServerPort          = getURLParam("speakerBotServerPort", "7580");
 const speakerBotChatRead            = getURLParam("speakerBotChatRead", false);
@@ -146,6 +146,23 @@ function registerPlatformHandlersToStreamerBot(handlers, logPrefix = '') {
             handler(...args);
         });
     }
+}
+
+
+async function waitForStreamerBot(platformName = '') {
+    const checkInterval = 1000;
+
+    return new Promise((resolve) => {
+        (function check() {
+            if (streamerBotStatus && streamerBotStatus.connected === true) {
+                console.debug(`[ChatRD][StreamerBot] Connected. Releasing "${platformName}".`);
+                resolve();
+                return;
+            }
+            console.debug(`[ChatRD][StreamerBot] Waiting for connection to release "${platformName}"...`);
+            setTimeout(check, checkInterval);
+        })();
+    });
 }
 
 

@@ -47,7 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#statistics #tiktok').style.display = '';
         }
         
-        tiktokConnection();
+        waitForStreamerBot('TikTok').then(() => {
+            tiktokConnection();
+        });
     }
 });
 

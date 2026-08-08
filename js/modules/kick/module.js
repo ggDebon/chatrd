@@ -44,9 +44,37 @@ const kickMessageHandlers = {
     },
 
     'Kick.ChatMessage': (response) => {
-        // if Pusher disconnects, ChatRD falls back to Streamer.bot.
         if (isPusherConnected) return;
         kickChatMessageFromStreamerBot(response.data);
+    },
+
+    'Kick.RewardRedemption': (response) => {
+        if (isPusherConnected) return;
+        kickRewardRedemptionFromStreamerBot(response.data);
+    },
+
+    'Kick.Subscription': (response) => {
+        if (isPusherConnected) return;
+        kickSubMessageFromStreamerBot(response.data);
+    },
+
+    'Kick.Resubscription': (response) => {
+        if (isPusherConnected) return;
+        kickSubMessageFromStreamerBot(response.data);
+    },
+
+    'Kick.GiftSubscription': (response) => {
+        if (isPusherConnected) return;
+        kickGiftMessageFromStreamerBot(response.data);
+    },
+
+    'Kick.MassGiftSubscription': (response) => {
+        if (isPusherConnected) return;
+        kickMassGiftMessageFromStreamerBot(response.data);
+    },
+
+    'Kick.sGifted': (response) => {
+        if (isPusherConnected) return;
     },
 
     'Kick.ViewerCountUpdate': (response) => {
@@ -71,9 +99,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.querySelector('#statistics #kick').style.display = '';        
         }
 
-        registerPlatformHandlersToStreamerBot(kickMessageHandlers, '[ChatRD][Streamer.bot][Kick]');
-
-        kickConnectionNew();
+        waitForStreamerBot('Kick').then(() => {
+            registerPlatformHandlersToStreamerBot(kickMessageHandlers, '[ChatRD][Streamer.bot][Kick]');
+            kickConnectionNew();
+        });
         
     }
     
@@ -93,7 +122,8 @@ async function kickConnectionNew() {
 
     const kickReconnectDelay = 5000;
     let kickHasNotifiedDisconnect = false;
-    let kickManualReconnectScheduled = false;
+    let kickReconnectScheduled = false;
+    const kickPusherWsUrl = 'wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.5.0&flash=false';
 
     const kickStreamerLogin = await getStreamerInfo();
     const userLogin = kickStreamerLogin.platforms.kick.broadcasterLogin;
@@ -127,18 +157,20 @@ async function kickConnectionNew() {
 
     if (kickSubBadges.length == 0) kickSubBadges.push(...userInfo.subscriber_badges);
 
-    const pusher = new Pusher('32cbd69e4b950bf97679', {
-        wsHost: 'ws-us2.pusher.com',
-        wsPort: 443,
-        forceTLS: true,
-        enabledTransports: ['ws'],
-        cluster: ''
-    });
+    const websocket = new WebSocket(kickPusherWsUrl);
+
+    const channels = [
+        `chatroom_${kickChatRoomId}`,
+        `chatrooms.${kickChatRoomId}`,
+        `chatrooms.${kickChatRoomId}.v2`,
+        `predictions-channel-${kickChatRoomId}`,
+        `channel_${kickChannelId}`
+    ];
 
     function scheduleManualReconnect(reason) {
 
-        if (kickManualReconnectScheduled) return;
-        kickManualReconnectScheduled = true;
+        if (kickReconnectScheduled) return;
+        kickReconnectScheduled = true;
 
         notifyError({
             title: 'ChatRD 🚨 Kick',
@@ -148,7 +180,7 @@ async function kickConnectionNew() {
         console.error(`[ChatRD][Pusher][Kick] Manual Reconnection Fired! Reason: ${reason}.`);
 
         try {
-            pusher.disconnect();
+            websocket.close();
         }
         catch (e) {
 
@@ -157,34 +189,16 @@ async function kickConnectionNew() {
                 text: `Error while disconnecting. Reason: ${e}.`
             });
 
-            console.warn(`[ChatRD][Pusher][Kick] Error while disconnecting an older Pusher instance: `, e);
+            console.warn(`[ChatRD][Pusher][Kick] Error while closing an older WebSocket instance: `, e);
         }
         setTimeout(kickConnectionNew, kickReconnectDelay);
     }
 
-    pusher.connection.bind('connected', () => {
-        kickHasNotifiedDisconnect = false;
-        kickManualReconnectScheduled = false;
-        isPusherConnected = true;
-        console.debug(`[ChatRD][Pusher][Kick] Connected to Kick successfully!`);
+    websocket.onopen = () => {
+        console.debug(`[ChatRD][Pusher][Kick] WebSocket opened. Waiting for Pusher handshake...`);
+    };
 
-        (async () => {
-            const kick7TVEmotes = await getKick7TVEmotes(kickUserId);
-            if (kick7TVEmotes != null) {
-                kick7TVEmotes.forEach(emote => kick7TVEmojis.set(emote.name, emote.url));
-            }
-        })();
-
-        notifySuccess({
-            title: 'ChatRD 🤝 Kick'
-        });
-    });
-
-    pusher.connection.bind('state_change', (states) => {
-        console.debug(`[ChatRD][Pusher][Kick] State change: ${states.previous} -> ${states.current}`);
-    });
-
-    pusher.connection.bind('disconnected', () => {
+    websocket.onclose = () => {
         isPusherConnected = false;
         if (!kickHasNotifiedDisconnect) {
             kickHasNotifiedDisconnect = true;
@@ -195,87 +209,128 @@ async function kickConnectionNew() {
         }
         console.debug(`[ChatRD][Pusher][Kick] Disconnected from Kick. Trying to reconnect...`);
 
-        // I don't trust their auto-reconnect
-        scheduleManualReconnect('disconnected');
-    });
+        // Raw WebSocket doesn't auto-reconnect: we own that responsibility entirely.
+        scheduleManualReconnect('closed');
+    };
 
-    pusher.connection.bind('unavailable', () => {
-        isPusherConnected = false;
-        console.warn(`[ChatRD][Pusher][Kick] Connection Unavailable. Possibly a Network Error.`);
-        notifyError({
-            title: 'ChatRD ❌ Kick',
-            text: `Connection Unavailable. Possibly a Network Error.`
-        });
-    });
+    websocket.onerror = (err) => {
+        // Native WebSocket error events carry no useful code/reason —
+        // onclose fires right after this and handles the actual reconnection.
+        console.error('[ChatRD][Pusher][Kick] WebSocket error:', err);
+    };
 
-    pusher.connection.bind('failed', () => {
-        // WebSocket/fallback não suportado ou falha irrecuperável:
-        // a lib não vai se recuperar sozinha, então reconstruímos do zero.
-        isPusherConnected = false;
-        scheduleManualReconnect('failed');
-    });
-
-    pusher.connection.bind('error', (err) => {
-        console.error('[ChatRD][Pusher][Kick] Connection error:', err);
-
-        // Alguns códigos de erro do Pusher indicam problemas que a lib
-        // não resolve sozinha (ex: app key inválida, over_capacity, etc).
-        // Só nesses casos consideramos a conexão como caída de fato.
-        const unrecoverableCodes = [4004, 4001, 4009];
-        if (err && err.data && unrecoverableCodes.includes(err.data.code)) {
-            isPusherConnected = false;
-            scheduleManualReconnect(`error code ${err.data.code}`);
+    websocket.onmessage = (response) => {
+        let payload;
+        try {
+            payload = JSON.parse(response.data);
         }
-    });
+        catch (e) {
+            console.error('[ChatRD][Pusher][Kick] Failed to parse message:', response.data, e);
+            return;
+        }
 
-    const channels = [
-        `chatroom_${kickChatRoomId}`,
-        `chatrooms.${kickChatRoomId}`,
-        `chatrooms.${kickChatRoomId}.v2`,
-        `predictions-channel-${kickChatRoomId}`,
-        `channel_${kickChannelId}`
-    ];
+        const eventName = payload.event;
 
-    const subscribedChannels = channels.map(name => pusher.subscribe(name));
+        // Pusher frames carry `data` as a JSON-encoded string; unwrap it here.
+        let eventData = payload.data;
+        if (typeof eventData === 'string') {
+            try {
+                eventData = JSON.parse(eventData);
+            }
+            catch (e) {
+                // Some payloads aren't JSON (rare) — keep the raw string.
+            }
+        }
 
-    subscribedChannels.forEach(channel => {
-        channel.bind('App\\Events\\ChatMessageEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] ChatMessageEvent', data);
-            kickChatMessage(data)
-        });
-        channel.bind('App\\Events\\SubscriptionEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] SubscriptionEvent:', data);
-            kickSubMessage(data)
-        });
-        channel.bind('App\\Events\\GiftedSubscriptionsEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] GiftedSubscriptionsEvent', data);
-            kickGiftMessage(data)
-        });
-        channel.bind('App\\Events\\RewardRedeemedEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] RewardRedeemedEvent', data);
-            kickRewardRedemption(data)
-        });
-        channel.bind('App\\Events\\StreamHostEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] StreamHostEvent', data);
-            kickRaidMessage(data)
-        });
-        channel.bind('App\\Events\\MessageDeletedEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] MessageDeletedEvent', data);
-            setTimeout(() => kickChatMessageDeleted(data), 3000);
-        });
-        channel.bind('App\\Events\\UserBannedEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] UserBannedEvent', data);
-            setTimeout(() => kickUserBanned(data), 3000);
-        });
-        channel.bind('App\\Events\\ChatroomClearEvent', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] ChatroomClearEvent', data);
-            kickChatClearMessages(data)
-        });
-        channel.bind('App\\Events\\KicksGifted', (data) => {
-            console.debug('[ChatRD][Pusher][Kick] KicksGifted', data);
-            kickKicksGiftedMessage(data)
-        });
-    });
+        switch (eventName) {
+
+            case 'pusher:connection_established': {
+                console.debug(`[ChatRD][Pusher][Kick] Connected to Kick successfully! Socket ID: ${eventData.socket_id}`);
+
+                kickHasNotifiedDisconnect = false;
+                kickReconnectScheduled = false;
+                isPusherConnected = true;
+
+                (async () => {
+                    const kick7TVEmotes = await getKick7TVEmotes(kickUserId);
+                    if (kick7TVEmotes != null) {
+                        kick7TVEmotes.forEach(emote => kick7TVEmojis.set(emote.name, emote.url));
+                    }
+                })();
+
+                notifySuccess({
+                    title: 'ChatRD 🤝 Kick'
+                });
+
+                channels.forEach(channelName => {
+                    websocket.send(JSON.stringify({ event: 'pusher:subscribe', data: { channel: channelName } }));
+                });
+
+                break;
+            }
+
+            case 'pusher:subscription_succeeded':
+                console.debug(`[ChatRD][Pusher][Kick] Subscription succeeded on channel "${payload.channel}"`);
+                break;
+
+            case 'pusher:subscription_error':
+                console.error(`[ChatRD][Pusher][Kick] Subscription error on channel "${payload.channel}":`, eventData);
+                break;
+
+            case 'pusher:error': {
+                console.error('[ChatRD][Pusher][Kick] Pusher error:', eventData);
+
+                const unrecoverableCodes = [4004, 4001, 4009];
+                if (eventData && unrecoverableCodes.includes(eventData.code)) {
+                    isPusherConnected = false;
+                    scheduleManualReconnect(`error code ${eventData.code}`);
+                }
+                break;
+            }
+
+            case 'pusher:ping':
+                websocket.send(JSON.stringify({ event: 'pusher:pong', data: {} }));
+                break;
+
+            default: {
+                console.debug(`[ChatRD][Pusher][Kick] Event on "${payload.channel}": ${eventName}`, eventData);
+
+                // Business events come as "App\\Events\\XEvent" or, sometimes, bare "XEvent".
+                const shortEventName = eventName.split('\\').pop();
+
+                switch (shortEventName) {
+                    case 'ChatMessageEvent':
+                        kickChatMessage(eventData);
+                        break;
+                    case 'SubscriptionEvent':
+                        kickSubMessage(eventData);
+                        break;
+                    case 'GiftedSubscriptionsEvent':
+                        kickGiftMessage(eventData);
+                        break;
+                    case 'RewardRedeemedEvent':
+                        kickRewardRedemption(eventData);
+                        break;
+                    case 'StreamHostEvent':
+                        kickRaidMessage(eventData);
+                        break;
+                    case 'MessageDeletedEvent':
+                        setTimeout(() => kickChatMessageDeleted(eventData), 3000);
+                        break;
+                    case 'UserBannedEvent':
+                        setTimeout(() => kickUserBanned(eventData), 3000);
+                        break;
+                    case 'ChatroomClearEvent':
+                        kickChatClearMessages(eventData);
+                        break;
+                    case 'KicksGifted':
+                        kickKicksGiftedMessage(eventData);
+                        break;
+                }
+                break;
+            }
+        }
+    };
 }
 
 
@@ -364,9 +419,6 @@ async function kickChatMessage(data) {
 
     addMessageItem('kick', clone, classes, userSlug, messageId);
 }
-
-
-
 async function kickChatMessageFromStreamerBot(data) {
     
     if (showKickMessages == false) return;
@@ -587,7 +639,43 @@ async function kickSubMessage(data) {
 
     addEventItem('kick', clone, classes, userId, messageId);
 }
+async function kickSubMessageFromStreamerBot(data) {
 
+    if (showKickSubs == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = createRandomString(40);
+    const userId = data.user.login.toLowerCase();
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['kick', 'sub'];
+
+    header.remove();
+
+    user.textContent = data.user.name;
+
+    action.innerHTML = tRD('kick.sub_action');
+
+    var months = formatSubMonthDuration(data.duration);
+    
+    value.innerHTML = `<strong>${months}</strong>`;
+
+    message.remove();
+
+    addEventItem('kick', clone, classes, userId, messageId);
+}
 
 
 async function kickGiftMessage(data) {
@@ -636,6 +724,54 @@ async function kickGiftMessage(data) {
     else {
         kickGiftSingleSub(data.gifter_username, data.gifted_usernames[0]);
     }
+    
+}
+async function kickGiftMessageFromStreamerBot(data) {
+
+    if (showKickGiftedSubs == false) return;
+    
+    kickGiftSingleSub(data.user.name, data.recipient.name)
+}
+async function kickMassGiftMessageFromStreamerBot(data) {
+
+    if (showKickGiftedSubs == false || showKickGiftedSubsUserTrain == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = createRandomString(40);
+    const userId = data.user.login.toLowerCase();
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['kick', 'gift'];
+
+    header.remove();
+
+    
+    user.textContent = data.user.name;
+
+    var giftedLength = data.recipients.length;
+    
+    action.innerHTML = tRD('kick.giftbomb_action', { count: giftedLength });
+    message.innerHTML = tRD('kick.giftbomb_message', { total: data.gifter_total });
+    value.remove();
+
+    for (recipients of data.recipients) {
+        kickGiftSingleSub(data.user.name, recipients.name);
+    }
+
+    addEventItem('kick', clone, classes, userId, messageId);
+    
     
 }
 
@@ -709,6 +845,47 @@ async function kickRewardRedemption(data) {
 
     addEventItem('kick', clone, classes, userId, messageId);
 }
+async function kickRewardRedemptionFromStreamerBot(data) {
+
+    if (showKickRewardRedemptions == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = createRandomString(40);
+    const userId = data.redeemer.name.toLowerCase();
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['kick', 'reward'];
+
+    header.remove();
+
+    user.textContent = data.redeemer.name;
+    action.innerHTML = tRD('kick.reward_action');
+
+    const giftHtml = renderGiftEventSuffix({
+        image : `<strong>${data.reward.title}</strong>`, 
+        value : `<img src="js/modules/kick/images/icon-channel-points.svg" alt="Channel Points"> ${data.reward.cost}`
+    });
+
+    value.innerHTML = `${giftHtml}`;
+    
+    var userInput = data.description ? `${data.description}` : '';
+    message.innerHTML = `${userInput}`;
+
+    addEventItem('kick', clone, classes, userId, messageId);
+}
+
 
 
 

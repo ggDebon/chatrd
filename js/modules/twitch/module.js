@@ -202,8 +202,10 @@ if (showTwitch) {
         document.querySelector('#twitch').style.display = '';
     }
     
-    registerPlatformHandlersToStreamerBot(twitchMessageHandlers, '[ChatRD][Twitch]');
-    twitchGoalsFetch();
+    waitForStreamerBot('Twitch').then(() => {
+        registerPlatformHandlersToStreamerBot(twitchMessageHandlers, '[ChatRD][Twitch]');
+        twitchGoalsFetch();
+    });
 }
 
 
