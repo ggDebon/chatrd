@@ -2,7 +2,7 @@
 /* KICK MODULE VARIABLES */
 /* ---------------------- */
 
-const kickStatus = {};
+let isPusherConnected = false;
 
 const showKick                      = getURLParam("showKick", false);
 
@@ -44,7 +44,9 @@ const kickMessageHandlers = {
     },
 
     'Kick.ChatMessage': (response) => {
-        //kickChatMessageFromStreamerBot(response.data);
+        // if Pusher disconnects, ChatRD falls back to Streamer.bot.
+        if (isPusherConnected) return;
+        kickChatMessageFromStreamerBot(response.data);
     },
 
     'Kick.ViewerCountUpdate': (response) => {
@@ -71,7 +73,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         registerPlatformHandlersToStreamerBot(kickMessageHandlers, '[ChatRD][Streamer.bot][Kick]');
 
-        //kickConnection();
         kickConnectionNew();
         
     }
@@ -145,12 +146,12 @@ async function kickConnectionNew() {
         });
 
         console.error(`[ChatRD][Pusher][Kick] Manual Reconnection Fired! Reason: ${reason}.`);
-        
+
         try {
             pusher.disconnect();
         }
         catch (e) {
-        
+
             notifyError({
                 title: 'ChatRD 🚨 Kick',
                 text: `Error while disconnecting. Reason: ${e}.`
@@ -164,6 +165,7 @@ async function kickConnectionNew() {
     pusher.connection.bind('connected', () => {
         kickHasNotifiedDisconnect = false;
         kickManualReconnectScheduled = false;
+        isPusherConnected = true;
         console.debug(`[ChatRD][Pusher][Kick] Connected to Kick successfully!`);
 
         (async () => {
@@ -178,7 +180,12 @@ async function kickConnectionNew() {
         });
     });
 
+    pusher.connection.bind('state_change', (states) => {
+        console.debug(`[ChatRD][Pusher][Kick] State change: ${states.previous} -> ${states.current}`);
+    });
+
     pusher.connection.bind('disconnected', () => {
+        isPusherConnected = false;
         if (!kickHasNotifiedDisconnect) {
             kickHasNotifiedDisconnect = true;
             notifyError({
@@ -186,10 +193,14 @@ async function kickConnectionNew() {
                 text: ``
             });
         }
-        console.debug(`[ChatRD][Pusher][Kick] Disconnected from Kick.`);
+        console.debug(`[ChatRD][Pusher][Kick] Disconnected from Kick. Trying to reconnect...`);
+
+        // I don't trust their auto-reconnect
+        scheduleManualReconnect('disconnected');
     });
 
     pusher.connection.bind('unavailable', () => {
+        isPusherConnected = false;
         console.warn(`[ChatRD][Pusher][Kick] Connection Unavailable. Possibly a Network Error.`);
         notifyError({
             title: 'ChatRD ❌ Kick',
@@ -200,6 +211,7 @@ async function kickConnectionNew() {
     pusher.connection.bind('failed', () => {
         // WebSocket/fallback não suportado ou falha irrecuperável:
         // a lib não vai se recuperar sozinha, então reconstruímos do zero.
+        isPusherConnected = false;
         scheduleManualReconnect('failed');
     });
 
@@ -208,9 +220,10 @@ async function kickConnectionNew() {
 
         // Alguns códigos de erro do Pusher indicam problemas que a lib
         // não resolve sozinha (ex: app key inválida, over_capacity, etc).
-        // Ajuste os códigos abaixo conforme os erros que você já viu no seu app.
+        // Só nesses casos consideramos a conexão como caída de fato.
         const unrecoverableCodes = [4004, 4001, 4009];
         if (err && err.data && unrecoverableCodes.includes(err.data.code)) {
+            isPusherConnected = false;
             scheduleManualReconnect(`error code ${err.data.code}`);
         }
     });
@@ -353,7 +366,7 @@ async function kickChatMessage(data) {
 }
 
 
-/*
+
 async function kickChatMessageFromStreamerBot(data) {
     
     if (showKickMessages == false) return;
@@ -391,9 +404,10 @@ async function kickChatMessageFromStreamerBot(data) {
 
     const avatarImage = data.user.profilePicture;
 
-    const [messageHTML, badgesHTML] = await Promise.all([
+    const [messageHTML, badgesHTML, roles] = await Promise.all([
         getKickEmotes(data.text),
         getKickBadgesFromStreamerBot(data.user.badges),
+        getKickRolesFromStreamerBot(data.user.badges)
     ]);
 
     header.remove();
@@ -437,7 +451,7 @@ async function kickChatMessageFromStreamerBot(data) {
     pronoun.remove();
 
     addMessageItem('kick', clone, classes, userSlug, messageId);
-}*/
+}
 
 
 
@@ -920,6 +934,18 @@ async function getKickRoles(roles) {
     
     roles.forEach(role => {
         rolesArray.push(role.type);
+    });
+
+    return rolesArray;
+}
+
+
+
+async function getKickRolesFromStreamerBot(roles) {
+    const rolesArray = [];
+    
+    roles.forEach(role => {
+        rolesArray.push(role.id);
     });
 
     return rolesArray;
