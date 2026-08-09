@@ -278,18 +278,23 @@ async function getChatRDUrl() {
 /* YouTube Member Emotes Functions */
 async function loadYoutubeMemberEmotes() {
     const youtubeCustomEmoteArea = document.querySelector('#youTubeCustomEmotes');
-    const youtubeCustomEmotes = await streamerBot.client.getGlobal('chatrdytcustomemotes', true);
 
-    if (!youtubeCustomEmotes) {
+    let youtubeCustomEmotes;
+
+    try {
+        youtubeCustomEmotes = await streamerBot.client.getGlobal('chatrdytcustomemotes', true);
+    }
+    catch (err) {
         console.warn('[ChatRD][Settings][YouTube] Member Emotes variable not found. Creating it...');
-
-        streamerBotClient.doAction({
+        
+        await streamerBot.client.doAction({
             name: "[YouTube] Member Emotes" },
             {
                 "chatrdytcustomemotes": "\"{}\"",
             }
         ).then((res) => {
             console.debug('[ChatRD][Settings] YouTube Member Emotes variable was created.');
+            youtubeCustomEmotes = { variable: { value: "\"{}\"" } };
         });
     }
 
@@ -497,7 +502,6 @@ async function streamerBotConnect() {
             streamerBot.connected = true;
             console.debug(`[ChatRD][Settings] Connected to Streamer.bot successfully!`);
             status.classList.add('connected');
-
 
             loadYoutubeMemberEmotes();
             renderActionsStatus();
