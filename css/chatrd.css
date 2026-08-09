@@ -603,6 +603,7 @@ body {
 
 .chat .item .actual-message {
     font-weight: 500;
+    overflow-wrap: anywhere;
 }
 
 .chat .item .actual-message a {
