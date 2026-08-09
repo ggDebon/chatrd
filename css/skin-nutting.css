@@ -34,6 +34,10 @@
     left: -60px;
 }
 
+.chat.vertical:has(.avatar) .item:has(.reply) .info .avatar {
+    top: -20px;
+}
+
 
 /* ------------------------------------------- */
 /* --------- CHAT - ONE LINE LAYOUT ---------- */
@@ -64,6 +68,10 @@
 .chat.oneline:has(.avatar) .item.first-chatter .message .first-message {
     position: relative;
     left: -42px;
+}
+
+.chat.oneline:has(.avatar) .item:has(.reply) .info .avatar {
+    top: -20px;
 }
 
 /* ------------------------------------------- */
@@ -99,4 +107,8 @@
 .chat.horizontal:has(.avatar) .item.first-chatter .message .first-message {
     position: relative;
     left: -42px;
+}
+
+.chat.horizontal:has(.avatar) .item:has(.reply) .info .avatar {
+    top: -20px;
 }

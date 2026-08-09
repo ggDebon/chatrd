@@ -529,6 +529,7 @@ body {
 
 .chat .item .message {
     display: inline-block;
+    max-width: 100%;
     border-radius: 5px;
     overflow-wrap: break-word;
 }
@@ -645,14 +646,19 @@ body {
 }
 
 .chat .item .reply {
-    max-width: 100%;
-    flex-basis: 100%;
-    overflow: hidden;
+    /*flex-basis: 100%;
+    overflow: hidden;*/
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
     font-size: 14px;
     color: #999;
+    padding-bottom: 2px;
+}
+
+.chat .item .reply::after {
+    display: block;
+    content: '';
 }
 
 
@@ -836,6 +842,10 @@ body {
 
 .chat.horizontal .item .actual-message img.emote {
     vertical-align: text-top;
+}
+
+.chat.horizontal .item .reply {
+    max-width: 400px;
 }
 
 /* --------------------------------------------- */
