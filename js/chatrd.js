@@ -3,6 +3,7 @@
 /* ----------------------- */
 
 let myConfetti;
+let scroll;
 
 const preview                       = getURLParam("preview", false);
 const showPlatform                  = getURLParam("showPlatform", true);
@@ -80,11 +81,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=41",
-    nutting: "skin-nutting.css?nocache=41",
-    kimballs: "skin-kimballs.css?nocache=41",
-    bubbles: "skin-bubbles.css?nocache=41",
-    'star-wars': "skin-star-wars.css?nocache=41"
+    default: "skin-default.css?nocache=42",
+    nutting: "skin-nutting.css?nocache=42",
+    kimballs: "skin-kimballs.css?nocache=42",
+    bubbles: "skin-bubbles.css?nocache=42",
+    'star-wars': "skin-star-wars.css?nocache=42"
 };
 
 const skinFile = SKINS[skin] || SKINS.default;
@@ -129,7 +130,7 @@ chatContainer.style.zoom = size;
 chatGhostContainer.style.zoom = size;
 
 chatContainer.classList.add( direction, orientation );
-chatContainer.classList.add( direction, orientation );
+chatGhostContainer.classList.add( direction, orientation );
 
 if (chatField) {
     const chatfieldelement = document.getElementById("chat-input");
@@ -138,6 +139,16 @@ if (chatField) {
 
 
 async function animateItemEntry(root, messageid) {
+	function addToChatContainer(wrapper) {
+        if (orientation === "twitch-chat" && !chatHorizontal) {
+            chatContainer.append(wrapper);
+        }
+        else {
+            chatContainer.prepend(wrapper);
+        }
+        scroll?.onPrepend();
+    }
+
 	const dimensionProp = chatHorizontal ? 'Width' : 'Height';
 
 	if ((document.hidden) || (animation == "none")) {
@@ -146,7 +157,7 @@ async function animateItemEntry(root, messageid) {
 		wrapper.classList.add('chat-element-wrapper');
 		wrapper.appendChild(target);
 
-		chatContainer.prepend(wrapper);
+		addToChatContainer(wrapper);
 		root.dataset.rendered = 'true';
 
 		if (hide > 0) {
@@ -184,7 +195,7 @@ async function animateItemEntry(root, messageid) {
 		wrapper.style[dimensionProp.toLowerCase()] = '0px';
 		wrapper.style.opacity = '0';
 
-		chatContainer.prepend(wrapper);
+		addToChatContainer(wrapper);
 
 		void wrapper[`offset${dimensionProp}`];
 
@@ -211,7 +222,7 @@ async function animateItemEntry(root, messageid) {
 	else {
 		const message = wrapper.querySelector('.message');
 		message.classList.add('animate__animated', 'animate__faster', `animate__${animation}`);
-		chatContainer.prepend(wrapper);
+		addToChatContainer(wrapper);
 	}
 
 
@@ -1084,6 +1095,7 @@ function useAutoScroll(container, options = {}) {
         resumeThreshold = 0.05,
         notice = null,
         smoothScroll = false,
+        reverse = true,
     } = options;
 
     let autoScroll = true;
@@ -1113,6 +1125,16 @@ function useAutoScroll(container, options = {}) {
         notice.addEventListener('click', () => scrollToBottom());
     }
 
+    function bottomScrollTop() {
+        return reverse ? 0 : (container.scrollHeight - container.clientHeight);
+    }
+
+    function distanceFromBottom(scrollTop, totalScrollable) {
+        return reverse
+            ? Math.abs(scrollTop)
+            : (totalScrollable - scrollTop);
+    }
+
     container.addEventListener('scroll', () => {
         if (scrolling) return;
 
@@ -1120,7 +1142,7 @@ function useAutoScroll(container, options = {}) {
         const totalScrollable = scrollHeight - clientHeight;
         if (totalScrollable === 0) return;
 
-        const percent = Math.abs(scrollTop) / totalScrollable;
+        const percent = distanceFromBottom(scrollTop, totalScrollable) / totalScrollable;
 
         if (autoScroll && percent > pauseThreshold) {
             autoScroll = false;
@@ -1139,7 +1161,7 @@ function useAutoScroll(container, options = {}) {
 
         const prev = container.style.scrollBehavior;
         container.style.scrollBehavior = 'auto';
-        container.scrollTop = 0;
+        container.scrollTop = bottomScrollTop();
         container.style.scrollBehavior = prev;
 
         const release = () => { scrolling = false; };
@@ -1151,13 +1173,14 @@ function useAutoScroll(container, options = {}) {
     }
 
     return {
-        onPrepend: () => { if (autoScroll) container.scrollTop = 0; },
+        onPrepend: () => { if (autoScroll) container.scrollTop = bottomScrollTop(); },
         scrollToBottom,
         isActive: () => autoScroll,
     };
 }
 
-function initFakeScrollbar(scrollEl, thumbEl) {
+function initFakeScrollbar(scrollEl, thumbEl, options = {}) {
+    const { reverse = true } = options;
     const track = thumbEl.parentElement;
 
     track.style.visibility = 'hidden';
@@ -1170,6 +1193,23 @@ function initFakeScrollbar(scrollEl, thumbEl) {
             el = el.parentElement;
         }
         return zoom;
+    }
+
+    // Converte scrollTop bruto -> posição visual (0 = topo do conteúdo, 1 = fundo)
+    function scrollTopToPosition(scrollTop, maxScroll) {
+        if (maxScroll <= 0) return 0;
+        if (reverse) {
+            return 1 - Math.min(1, Math.max(0, Math.abs(scrollTop) / maxScroll));
+        }
+        return Math.min(1, Math.max(0, scrollTop / maxScroll));
+    }
+
+    // Converte posição visual (0 = topo, 1 = fundo) -> scrollTop bruto
+    function positionToScrollTop(position, maxScroll) {
+        const clamped = Math.min(1, Math.max(0, position));
+        return reverse
+            ? -((1 - clamped) * maxScroll)
+            : clamped * maxScroll;
     }
 
     function updateThumb() {
@@ -1192,12 +1232,13 @@ function initFakeScrollbar(scrollEl, thumbEl) {
         track.style.visibility = 'visible';
         thumbEl.style.display = 'block';
 
-        const scrollTop = Math.abs(scrollEl.scrollTop) * zoom;
+        const scrollTop = scrollEl.scrollTop * zoom;
         const maxScroll = scrollHeight - clientHeight;
-        const ratio = 1 - Math.min(1, Math.max(0, scrollTop / maxScroll));
+        const position = scrollTopToPosition(scrollTop, maxScroll);
+
         const thumbH = Math.max(30, (clientHeight / scrollHeight) * trackH);
         thumbEl.style.height = thumbH + 'px';
-        thumbEl.style.top = (ratio * (trackH - thumbH)) + 'px';
+        thumbEl.style.top = (position * (trackH - thumbH)) + 'px';
     }
 
     let isDragging = false;
@@ -1248,8 +1289,8 @@ function initFakeScrollbar(scrollEl, thumbEl) {
         const clientHeight = scrollEl.clientHeight * zoom;
         const maxScroll = scrollHeight - clientHeight;
 
-        const ratio = 1 - Math.min(1, Math.max(0, clickY / trackH));
-        scrollEl.scrollTop = -(ratio * maxScroll);
+        const position = clickY / trackH;
+        scrollEl.scrollTop = positionToScrollTop(position, maxScroll);
     });
 
     scrollEl.addEventListener('scroll', updateThumb);
@@ -1450,12 +1491,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     loadChatInputSettingFromLocalStorage();
     myConfetti = confetti.create(createConfettiCanvas(), { resize: true });
 
-    if (!chatContainer.classList.contains('noscrollbar')) {
-        const scroll = useAutoScroll(chatContainer, {
-            notice: document.querySelector('#chat-scroll-bottom'),
-        });
+    scroll = useAutoScroll(chatContainer, {
+        notice: document.querySelector('#chat-scroll-bottom'),
+        reverse: !(orientation === "twitch-chat" && !chatHorizontal),
+    });
 
-        initFakeScrollbar(chatContainer, document.querySelector('.fake-thumb'));
+    if (!chatContainer.classList.contains('noscrollbar')) {
+        initFakeScrollbar(chatContainer, document.querySelector('.fake-thumb'), {
+            reverse: !(orientation === "twitch-chat" && !chatHorizontal)
+        });
     }
 
     chatGhostResize();

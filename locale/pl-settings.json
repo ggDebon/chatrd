@@ -69,7 +69,8 @@
 		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Nowe wiadomości",
 		"new_messages_from_options": {
 			"top_to_bottom": "Od góry do dołu",
-			"bottom_to_top": "Od dołu do góry"
+			"bottom_to_top": "Od dołu do góry",
+			"twitch_chat": "Tak samo jak na czacie Twitch"
 		},
 		"orientation_warning": "Orientacja czatu <strong>nie będzie działać, jeśli Układ czatu jest ustawiony na <u>Poziomy</u></strong>.",
 		"group_messages": "Grupuj Wiadomości Czatu",

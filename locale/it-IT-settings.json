@@ -69,7 +69,8 @@
 		"new_messages_from": "<i class=\"ri-corner-down-right-line\"></i> Nuovi messaggi",
 		"new_messages_from_options": {
 			"top_to_bottom": "Dall'alto verso il basso",
-			"bottom_to_top": "Dal basso verso l'alto"
+			"bottom_to_top": "Dal basso verso l'alto",
+			"twitch_chat": "Come nella Chat di Twitch"
 		},
 		"orientation_warning": "L'orientamento della chat <strong>non funzionerà se il layout della chat è impostato su <u>Orizzontale</u></strong>.",
 		"group_messages": "Raggruppa Messaggi della Chat",

@@ -698,7 +698,9 @@ body {
     overflow-wrap: break-word;
 }
 
-
+.chat.vertical.twitch-chat {
+    flex-direction: column;
+}
 
 
 
@@ -761,6 +763,10 @@ body {
 .chat.oneline .item.first-chatter .first-message,
 .chat.oneline .item .header {
     padding-bottom: 2px;
+}
+
+.chat.oneline.twitch-chat {
+    flex-direction: column;
 }
 
 
