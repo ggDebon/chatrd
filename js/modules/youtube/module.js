@@ -191,8 +191,6 @@ async function youTubeChatMessage(data) {
     if (data.user.isSponsor) { roles.push('sponsor'); }
     if (data.user.isModerator) { roles.push('moderator'); }
     if (data.user.isVerified) { classes.push('verified'); }
-
-    
     if (data.user.isOwner) {
         roles.push('streamer');
         userLinkElement.style = `--user-color: #000000`;

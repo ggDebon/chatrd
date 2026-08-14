@@ -287,7 +287,7 @@ async function twitchChatMessage(data) {
     
     const tierClasses = { '1000': 'tier-one-sub', '2000': 'tier-two-sub', '3000': 'tier-three-sub' };
 
-    if (data.user.subscribed == true) {
+    if ((data.user.subscribed == true) && (data.user.role != 4)) {
         roles.push('subscriber');
 
         const tierClass = tierClasses[data.user.subscriptionTier];
