@@ -250,6 +250,7 @@ async function twitchChatMessage(data) {
     );
 
     const classes = ['twitch', 'msg'];
+    const roles = [];
 
     const [avatarImage, badgeList] = await Promise.all([
         getTwitchAvatar(data.user.login),
@@ -287,14 +288,14 @@ async function twitchChatMessage(data) {
     const tierClasses = { '1000': 'tier-one-sub', '2000': 'tier-two-sub', '3000': 'tier-three-sub' };
 
     if (data.user.subscribed == true) {
-        classes.push('subscriber');
+        roles.push('subscriber');
 
         const tierClass = tierClasses[data.user.subscriptionTier];
-        if (tierClass) classes.push(tierClass);
+        if (tierClass) roles.push(tierClass);
     }
-    if (data.user.role == 2) { classes.push('vip'); }
-    if (data.user.role == 3) { classes.push('moderator'); }
-    if (data.user.role == 4) { classes.push('streamer'); }
+    if (data.user.role == 2) { roles.push('vip'); }
+    if (data.user.role == 3) { roles.push('moderator'); }
+    if (data.user.role == 4) { roles.push('streamer'); }
 
     if (data.meta.firstMessage) {
         classes.push('first-chatter');
@@ -371,6 +372,10 @@ async function twitchChatMessage(data) {
     const textIdentifier = await generateSHA256Identifier(data.text);
     message.dataset.text = textIdentifier;
     message.innerHTML = DOMPurify.sanitize(messageFromParts);
+
+    if (roles.length == 0) roles.push('user');
+
+    classes.push(...roles);
 
     addMessageItem('twitch', clone, classes, userId, messageId);
 }

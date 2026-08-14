@@ -400,6 +400,8 @@ async function kickChatMessage(data) {
     header.remove();
     firstMessage.remove();
 
+    if (roles.length == 0) roles.push('user');
+
     classes.push(...roles);
     
     const kickStreamer = streamerInfo.get.platforms.kick;
@@ -483,7 +485,8 @@ async function kickChatMessageFromStreamerBot(data) {
     header.remove();
     firstMessage.remove();
 
-    //classes.push(...roles);
+    if (roles.length == 0) roles.push('user');
+    classes.push(...roles);
     
     const kickStreamer = streamerInfo.get.platforms.kick.broadcasterUserName;
     

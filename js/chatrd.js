@@ -81,11 +81,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=42",
-    nutting: "skin-nutting.css?nocache=42",
-    kimballs: "skin-kimballs.css?nocache=42",
-    bubbles: "skin-bubbles.css?nocache=42",
-    'star-wars': "skin-star-wars.css?nocache=42"
+    default: "skin-default.css?nocache=43",
+    nutting: "skin-nutting.css?nocache=43",
+    kimballs: "skin-kimballs.css?nocache=43",
+    bubbles: "skin-bubbles.css?nocache=43",
+    'star-wars': "skin-star-wars.css?nocache=43"
 };
 
 const skinFile = SKINS[skin] || SKINS.default;
@@ -267,8 +267,6 @@ function buildChatModerationHTML(platform, userid, messageid, streamerOfOrigin) 
 
 function addMessageItem(platform, clone, classes, userid, messageid) {
     removeExtraChatMessages();
-
-    classes.push('user');
 
     const root = clone.firstElementChild;
     root.classList.add(...classes);
@@ -775,6 +773,11 @@ async function pushChatInputSettings() {
 chatInputForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
+    const chatInputText = chatInput.value;
+    if (!chatInputText || !chatInputText.trim()) {
+        return;
+    }
+
     var chatSendPlatforms = [];
 
     const chatSettings = document.getElementById("chat-settings");
@@ -789,11 +792,8 @@ chatInputForm.addEventListener("submit", function(event) {
     if (showTiktok == true && showTikTokMessages == true && sendTikTokMessages == true) { chatSendPlatforms.push('tiktok'); }
     if (showKick == true && showKickMessages == true && sendKickMessages == true) { chatSendPlatforms.push('kick'); }
 
-    chatSendPlatforms = chatSendPlatforms.join(',')
+    chatSendPlatforms = chatSendPlatforms.join(',');
 
-    const chatInputText = chatInput.value;
-
-    
     streamerBotClient.doAction(
     { name : "[Twitch][YouTube][Kick] Msgs/Cmds" },
     {

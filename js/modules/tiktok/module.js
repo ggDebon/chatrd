@@ -199,13 +199,14 @@ async function tiktokChatMessage(data) {
 
     const classes = ['tiktok', 'msg'];
 
-    if (data.uniqueId === data.tikfinityUsername) classes.push('streamer');
-    if (data.isModerator) classes.push('moderator');
-    if (data.isSubscriber) classes.push('subscriber');
+    if (data.uniqueId === data.tikfinityUsername) roles.push('streamer');
+    if (data.isModerator) roles.push('moderator');
+    if (data.isSubscriber) roles.push('subscriber');
 
-    const [avatarImage,  badgesHTML] = await Promise.all([
+    const [avatarImage,  badgesHTML, roles] = await Promise.all([
         getTikTokAvatar(data),
         getTikTokBadges(data),
+        getTiktokRoles(data)
     ]);
 
     header.remove();
@@ -235,7 +236,9 @@ async function tiktokChatMessage(data) {
     userLinkElement.textContent = data.nickname;
     userLinkElement.title = `${data.nickname} @ ${userLink}`;
 
-    
+    if (roles.length == 0) roles.push('user');
+    classes.push(...roles);
+
     message.textContent = data.comment;
     await getTikTokEmotes(data, message),
 
@@ -649,8 +652,9 @@ async function getTiktokRoles(data) {
 
     const rolesArray = [];
 
-    if (data.isSubscriber) rolesArray.push('subscriber')
+    if (data.uniqueId === data.tikfinityUsername) rolesArray.push('streamer');
     if (data.isModerator) rolesArray.push('moderator');
+    if (data.isSubscriber) rolesArray.push('subscriber');
 
     const { userBadges } = data;
 

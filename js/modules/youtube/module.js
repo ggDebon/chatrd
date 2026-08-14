@@ -139,6 +139,7 @@ async function youTubeChatMessage(data) {
     );
 
     const classes = ['youtube', 'msg'];
+    const roles = []; 
 
     const verticalTags = ["vertical", "shorts"];
     const isVertical = data.broadcast.tags.some(item =>
@@ -187,15 +188,18 @@ async function youTubeChatMessage(data) {
     if (showBadges) badges.innerHTML = badgeList; else badges.remove();
 
 
-    if (data.user.isSponsor) { classes.push('sponsor'); }
-    if (data.user.isModerator) { classes.push('moderator'); }
+    if (data.user.isSponsor) { roles.push('sponsor'); }
+    if (data.user.isModerator) { roles.push('moderator'); }
     if (data.user.isVerified) { classes.push('verified'); }
 
     
     if (data.user.isOwner) {
-        classes.push('streamer');
+        roles.push('streamer');
         userLinkElement.style = `--user-color: #000000`;
     }
+
+    if (roles.length == 0) roles.push('user');
+    classes.push(...roles);
 
     addMessageItem('youtube', clone, classes, userId, messageId);
 }
