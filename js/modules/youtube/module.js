@@ -95,7 +95,9 @@ if (showYoutube) {
         document.querySelector('#youtube').style.display = '';
     }
 
-    registerPlatformHandlersToStreamerBot(youtubeMessageHandlers, '[ChatRD][YouTube]');
+    waitForStreamerBot('YouTube').then(() => {
+        registerPlatformHandlersToStreamerBot(youtubeMessageHandlers, '[ChatRD][YouTube]');
+    });
 }
 
 
@@ -651,7 +653,6 @@ async function youTubeUpdateStatistics(data) {
 
 // ---------------------------
 // YOUTUBE UTILITY FUNCTIONS
-
 
 
 async function getYouTubeEmotes(data, messageElement) {

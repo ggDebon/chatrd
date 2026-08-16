@@ -50,6 +50,7 @@
 .chat .item.tiktok span.badge.sceneTen img {
     margin: 0 3px 0 0;
     height: 16px;
+    width: auto;
 }
 
 .chat .item.tiktok span.badge.sceneTen img { margin: 0; }

@@ -23,7 +23,7 @@ async function loadChatRDSettings() {
     const saved = localStorage.getItem("chatrdWidgetSettings");
     const settings = saved ? JSON.parse(saved) : {};
 
-    document.querySelectorAll('[data-setting]').forEach((el) => {
+    document.querySelectorAll('[data-setting]:not([data-ignore])').forEach((el) => {
         const key = el.dataset.setting;
         const hasSavedValue = Object.prototype.hasOwnProperty.call(settings, key);
 
@@ -90,12 +90,85 @@ async function loadChatRDSettings() {
     
     const url = await getChatRDUrl();
     document.querySelector('#chatRDPreview').src = url + `&preview=true`;
+    
 }
+
+async function loadChatRDTiktokService() {
+    let tiktokServiceUsed;
+    let tiktokServiceUser;
+    let tiktokServiceApiKey;
+
+    const tiktokServiceUsedSelect = document.querySelector('[data-setting=tiktokService]').value;
+    document.querySelectorAll(`[data-tiktok-service="${tiktokServiceUsedSelect}"]`).forEach((el) => {
+        el.style.display = '';
+    });
+
+    const tiktokServiceUsedSelected = document.querySelector('[data-setting=tiktokService]').value;
+    const tiktokServiceUserInput = document.querySelector('[data-setting=tiktoksUser]').value;
+    const tiktokServiceApiKeyInput = document.querySelector('[data-setting=tiktokTikToolsApiKey]').value;
+
+    try {
+        console.debug('[ChatRD][Settings][TikTok] Grabbing TikTok Service Variable...');
+        tiktokServiceUsed = await streamerBot.client.getGlobal('chatrdTiktokService', true);
+        tiktokServiceUser = await streamerBot.client.getGlobal('chatrdTiktokUser', true);
+        tiktokServiceApiKey = await streamerBot.client.getGlobal('chatrdTikToolsApiKey', true);
+
+        if (!tiktokServiceUsed || !tiktokServiceUser || !tiktokServiceApiKey) {
+            throw new Error('[ChatRD][Settings][TikTok] TikTok Service Variables not found.');
+        }
+
+        document.querySelector('[data-setting=tiktoksUser]').value = tiktokServiceUser.variable.value;
+        document.querySelector('[data-setting=tiktokTikToolsApiKey]').value = tiktokServiceApiKey.variable.value;
+    }
+
+    catch (err) {
+        console.warn('[ChatRD][Settings][TikTok] TikTok Service Variables not found. Creating them...');
+        
+        await streamerBot.client.doAction(
+            { name: "[TikTok][TikTools] Service" },
+            {
+                "chatrdTiktokService": tiktokServiceUsedSelected,
+                "chatrdTiktokUser": tiktokServiceUserInput,
+                "chatrdTikToolsApiKey": tiktokServiceApiKeyInput,
+            }
+        ).then((res) => {
+            console.debug('[ChatRD][Settings][TikTok] TikTok Service Variables were created.');
+        });
+    }
+}
+
+
+
+async function setChatRDTiktokService(service, user, apiKey) {
+
+    if (!streamerBot.connected) {
+        console.warn(`[ChatRD][Settings][TikTok] Streamer.bot is not connected.`);
+        return;
+    }
+
+    document.querySelectorAll('[data-tiktok-service]').forEach((el) => {
+        el.style.display = 'none';
+    });
+
+    document.querySelectorAll(`[data-tiktok-service="${service}"]`).forEach((el) => {
+        el.style.display = '';
+    });
+    
+    await streamerBot.client.doAction({
+        name: "[TikTok][TikTools] Service" },
+        {
+            "chatrdTiktokService": service,
+            "chatrdTiktokUser": user,
+            "chatrdTikToolsApiKey": apiKey,
+        });
+}
+
+
 
 async function collectChatRDSettings() {
 	const settings = {};
 
-	document.querySelectorAll('[data-setting]').forEach((el) => {
+	document.querySelectorAll('[data-setting]:not([data-ignore])').forEach((el) => {
 		const key = el.dataset.setting;
 		const defaultValue = el.dataset.default;
 
@@ -162,6 +235,21 @@ async function bindChatRDSettings() {
         });
 	});
 
+    //bindTikTokSettings()
+}
+
+async function bindTikTokSettings() {
+    const serviceEl = document.querySelector('[data-setting=tiktokService]');
+    const userEl = document.querySelector('[data-setting="tiktoksUser"]');
+    const apiKeyEl = document.querySelector('[data-setting="tiktokTikToolsApiKey"]');
+
+    const updateTiktokService = () => {
+        setChatRDTiktokService(serviceEl.value, userEl.value, apiKeyEl.value);
+    };
+
+    serviceEl.addEventListener('change', updateTiktokService);
+    userEl.addEventListener('input', updateTiktokService);
+    apiKeyEl.addEventListener('input', updateTiktokService);
 }
 
 async function importChatRDSettings(url) {
@@ -174,7 +262,7 @@ async function importChatRDSettings(url) {
     const settings = Object.fromEntries( base.searchParams.entries() );
     const validated = {};
 
-    document.querySelectorAll('[data-setting]').forEach((el) => {
+    document.querySelectorAll('[data-setting]:not([data-ignore])').forEach((el) => {
         const key = el.dataset.setting;
 
         if ( !Object.prototype.hasOwnProperty.call( settings, key ) ) {
@@ -504,6 +592,7 @@ async function streamerBotConnect() {
             status.classList.add('connected');
 
             loadYoutubeMemberEmotes();
+            //loadChatRDTiktokService();
             renderActionsStatus();
         },
         onDisconnect: () => {
@@ -523,6 +612,8 @@ async function speakerBotConnect() {
     const speakerBotVoiceAlias = document.querySelector(`[data-setting=speakerBotVoiceAlias]`).value;
 
     const showSpeakerbot = document.querySelector(`[data-setting=showSpeakerbot]`).checked;
+
+    if (!showSpeakerbot) return;
 
     if (!showSpeakerbot) {
         if (speakerBot.client && speakerBot.client.ws && speakerBot.client.ws.readyState !== WebSocket.CLOSED) {

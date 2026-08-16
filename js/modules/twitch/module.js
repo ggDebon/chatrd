@@ -182,6 +182,7 @@ const twitchMessageHandlers = {
 
     'General.Custom': (response) => {
         if (response.data?.data?.eventName === 'Twitch.GoalFetch' && response.data.data.event) {
+            console.debug(`[ChatRD][Twitch][GoalFetch]`, response.data.data.event);
             twitchGoalsRenderer(response.data.data.event);
         }
     }

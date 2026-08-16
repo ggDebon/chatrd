@@ -81,11 +81,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=44",
-    nutting: "skin-nutting.css?nocache=44",
-    kimballs: "skin-kimballs.css?nocache=44",
-    bubbles: "skin-bubbles.css?nocache=44",
-    'star-wars': "skin-star-wars.css?nocache=44"
+    default: "skin-default.css?nocache=46",
+    nutting: "skin-nutting.css?nocache=46",
+    kimballs: "skin-kimballs.css?nocache=46",
+    bubbles: "skin-bubbles.css?nocache=46",
+    'star-wars': "skin-star-wars.css?nocache=46"
 };
 
 const skinFile = SKINS[skin] || SKINS.default;
@@ -204,7 +204,7 @@ async function animateItemEntry(root, messageid) {
 		: ghostClone.offsetHeight || 0;
 
 		wrapper.style[dimensionProp.toLowerCase()] = `${itemDimension}px`;
-		wrapper.dataset.pastheight = `${itemDimension}px`;
+		//wrapper.dataset.pastheight = `${itemDimension}px`;
 		wrapper.style.opacity = '1';
 
 		setTimeout(function () {
@@ -393,23 +393,6 @@ function addEventItem(platform, clone, classes, userid, messageid) {
     }
 
     animateItemEntry(root, messageid);
-}
-
-function addLittleEventItem(platform, clone, classes, userid, messageid) {
-    eventLittleContainer.innerHTML = '';
-
-    if (showSpeakerbot == true && speakerBotEventRead == true) { speakerBotTTSRead(clone, 'event'); }
-
-    const root = clone.firstElementChild;
-    root.classList.add(...classes);
-    root.dataset.user = userid;
-    root.id = messageid;
-
-    applyEventPlatformIcon(platform, root, clone.querySelector('.platform'));
-
-    root.classList.add('animate__animated', 'animate__fadeInUp');
-
-    eventLittleContainer.prepend(root.parentNode ?? root);
 }
 
 async function preloadAndPrepend(container, fragment) {
@@ -784,7 +767,8 @@ chatInputForm.addEventListener("submit", function(event) {
 
     const sendTwitchMessages = chatSettings.querySelector('input[type=checkbox][name="sendTwitchMessages"]').checked;
     const sendYouTubeMessages = chatSettings.querySelector('input[type=checkbox][name="sendYouTubeMessages"]').checked;
-    const sendTikTokMessages = chatSettings.querySelector('input[type=checkbox][name="sendTikTokMessages"]').checked;
+    //const sendTikTokMessages = chatSettings.querySelector('input[type=checkbox][name="sendTikTokMessages"]').checked;
+    const sendTikTokMessages = false;
     const sendKickMessages = chatSettings.querySelector('input[type=checkbox][name="sendKickMessages"]').checked;
 
     if (showTwitch == true && showTwitchMessages == true && sendTwitchMessages == true) { chatSendPlatforms.push('twitch'); }

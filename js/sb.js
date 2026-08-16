@@ -141,7 +141,9 @@ function registerPlatformHandlersToStreamerBot(handlers, logPrefix = '') {
     for (const [event, handler] of Object.entries(handlers)) {
         streamerBotClient.on(event, (...args) => {
             if (logPrefix) {
-                console.debug(`${logPrefix} ${event}`, args[0]);
+                if (event != 'General.Custom') {
+                    console.debug(`${logPrefix} ${event}`, args[0]);
+                }
             }
             handler(...args);
         });

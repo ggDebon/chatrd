@@ -7,6 +7,9 @@ const tikFinityStatus = {};
 
 const showTiktok                    = getURLParam("showTiktok", false);
 
+//const tiktokService                 = getURLParam("tiktokService", "tikfinity");
+const tiktokService                 = "tikfinity";
+
 const showTikTokMessages            = getURLParam("showTikTokMessages", true);
 const showTikTokJoins               = getURLParam("showTikTokJoins", false);
 const showTikTokFollows             = getURLParam("showTikTokFollows", true);
@@ -31,6 +34,24 @@ const tiktokGiftsClasses = [
 
 userColors.set('tiktok', new Map());
 
+
+const tiktokMessageHandlers = {
+
+    'General.Custom': (response) => {
+        if (response.data?.data?.eventName === 'TikTok.TikTools') {
+            if (typeof response.data.data.event === 'object') {
+                console.debug(`[ChatRD][TikTok][Tik.Tools][${response.data.data.event.event}]`, response.data.data.event.data);
+            }
+            else {
+                console.debug(`[ChatRD][TikTok][Tik.Tools]`, response.data.data.event);
+            }
+        }
+    }
+
+};
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     if (showTiktok) {
 
@@ -48,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         waitForStreamerBot('TikTok').then(() => {
-            tiktokConnection();
+            if (tiktokService == 'tikfinity') {
+                tiktokConnection();
+            }
+            if (tiktokService == 'tiktools') {
+                registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
+            }
+            
         });
     }
 });
@@ -198,16 +225,15 @@ async function tiktokChatMessage(data) {
     );
 
     const classes = ['tiktok', 'msg'];
-
-    if (data.uniqueId === data.tikfinityUsername) roles.push('streamer');
-    if (data.isModerator) roles.push('moderator');
-    if (data.isSubscriber) roles.push('subscriber');
-
     const [avatarImage,  badgesHTML, roles] = await Promise.all([
         getTikTokAvatar(data),
         getTikTokBadges(data),
         getTiktokRoles(data)
     ]);
+
+    if (data.uniqueId === data.tikfinityUsername) roles.push('streamer');
+    if (data.isModerator) roles.push('moderator');
+    if (data.isSubscriber) roles.push('subscriber');
 
     header.remove();
     firstMessage.remove();
@@ -355,9 +381,10 @@ async function tiktokJoinMessage(data) {
         return;
     };
 
+    const joinParent = joinElement.parentNode;
     const messageElement = joinElement.querySelector('.message');
 
-    var animateClass = (chatHorizontal == true) ? 'animate__fadeInRight' : 'animate__fadeInUp';
+    const animateClass = (chatHorizontal == true) ? 'animate__fadeInRight' : 'animate__fadeInUp';
 
     joinElement.dataset.user = userId;
     joinElement.id = messageId;
@@ -365,7 +392,7 @@ async function tiktokJoinMessage(data) {
 
     messageElement.classList.add('animate__animated', 'animate__faster', animateClass);
     
-    chatContainer.prepend(joinElement);
+    chatContainer.prepend(joinParent);
 
 }
 
@@ -397,14 +424,18 @@ async function tiktokLikesMessage(data) {
     var likeCountTotal = parseInt(data.likeCount);
     
     const previousLikeContainer = chatContainer.querySelector(`div.event.tiktok.likes[data-user="${data.userId}"]`);
+    const previousLikeContainerParent = previousLikeContainer?.parentNode;
 
     if (previousLikeContainer) {
         const likeCountElem = previousLikeContainer.querySelector('.value strong');
+        const animateClass = (chatHorizontal == true) ? 'animate__fadeInRight' : 'animate__fadeInUp';
+
+        previousLikeContainerParent.classList.add('animate__animated', 'animate__faster', animateClass);
         if (likeCountElem) {
             var likeCountPrev = parseInt(likeCountElem.textContent);
             likeCountTotal = Math.floor(likeCountPrev + likeCountTotal);
             likeCountElem.textContent = likeCountTotal;
-            chatContainer.prepend(previousLikeContainer);
+            chatContainer.prepend(previousLikeContainerParent);
         }
     }
     else {
