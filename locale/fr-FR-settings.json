@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Sélectionne le son que tu souhaites jouer.",
 		"sound_notifications_volume": "Volume",
 		"sound_notifications_test": "Tester la Notification",
+		"sound_notifications_group": "Regrouper Toutes les",
+		"sound_notifications_group_hint": "Rejoue la notification si plusieurs messages arrivent à la suite sans pause entre eux.",
+		"sound_notifications_interval": "Intervalle de Silence",
+		"sound_notifications_interval_hint": "Délai sans nouveau message avant qu'une notification en attente ne se déclenche.",
 		"group_messages": "Grouper les Messages du Chat",
 		"group_messages_hint": "Les messages consécutifs du même utilisateur seront groupés",
 		"avatars": "Avatars",
@@ -97,13 +101,15 @@
 		"platform_hint": "Affiche les logos des plateformes.",
 		"platform_statistics": "Statistiques de la Plateforme",
 		"platform_statistics_hint": "Affiche toutes les statistiques des plateformes.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Combiner les Spectateurs des Plateformes",
+    	"platform_views_combined_hint": "Combine le nombre de spectateurs de toutes les plateformes activées.",
 		"moderation_buttons": "Boutons de Modération",
 		"moderation_buttons_hint": "Ajoute des boutons pour les actions de modération.",
 		"chat_field": "Champ de Chat",
 		"chat_field_hint": "Ajoute un champ de chat pour écrire dans ton chat.",
 		"chat_field_warning": "Le Champ de Chat accepte aussi les <strong>/commandes</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Commandes Prises en Charge</a></strong>",
 		"image_embedding_filter": "Filtre d'Intégration d'Images",
-		"image_embedding_filter_hint": "Si activé, seules les images provenant des domaines ci-dessous pourront être intégrées. Sépare-les par des virgules. <strong>ex : <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Ajoute un astérisque (*) si tu souhaites autoriser tous les domaines.</strong>"
+		"image_embedding_filter_hint": "Si activé, seules les images provenant des domaines ci-dessous pourront être intégrées. Sépare-les par des virgules. <strong>ex : <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

@@ -187,7 +187,7 @@
                             <div class="description"><small data-i18n-html="speakerbot.voice_alias_hint">Set in <strong><em>Settings -> Voice Alias</em></strong> on Speaker.bot</small></div>
                         </div>
                         <div class="element">
-                            <wa-input data-setting="speakerBotVoiceAlias" value="" placeholder="For example, Maria" data-i18n-placeholder="speakerbot.voice_alias_placeholder"></wa-input>
+                            <wa-input data-setting="speakerBotVoiceAlias" data-default="" value="" placeholder="For example, Maria" data-i18n-placeholder="speakerbot.voice_alias_placeholder"></wa-input>
                         </div>
                     </div>
                     
@@ -547,6 +547,26 @@
                         </div>
                     </div>
 
+                    <div class="config slider">
+                        <div class="info">
+                            <div class="title" data-i18n="general.sound_notifications_group">Group Every</div>
+                            <div class="description"><small data-i18n-html="general.sound_notifications_group_hint">Plays the notification again if several messages arrive in a row without a pause.</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-number-input data-setting="playMsgBatch" value="1" data-default="1"></wa-number-input>
+                        </div>
+                    </div>
+
+                    <div class="config slider">
+                        <div class="info">
+                            <div class="title" data-i18n="general.sound_notifications_interval">Silence Interval</div>
+                            <div class="description"><small data-i18n-html="general.sound_notifications_interval_hint">Time without new messages before a pending notification plays.</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-number-input data-setting="playMsgSilence" value="1" data-default="1"></wa-number-input>
+                        </div>
+                    </div>
+
                     <div class="config full align-middle">
                         <wa-button class="button" id="playSoundButton" variant="brand">
                             <span data-i18n-html="general.sound_notifications_test">Test Notification</span>
@@ -653,6 +673,16 @@
                         </div>
                     </div>
 
+                    <div class="config">
+                        <div class="info">    
+                            <div class="title" data-i18n-html="general.platform_views_combined"><i class="ri-corner-down-right-line"></i> Combine Platform Viewers</div>
+                            <div class="description"><small data-i18n="general.platform_views_combined_hint">Combine the viewer counts from all enabled platforms.</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-switch data-setting="combineViewers" data-default="false" size="xl"></wa-switch>
+                        </div>
+                    </div>
+
                     <wa-divider></wa-divider>
 
                     <div class="config">
@@ -696,13 +726,13 @@
                     <div class="config full">
                         <div class="info">
                             <div class="description">
-                                <small data-i18n-html="general.image_embedding_filter_hint">If enabled, only images from the domains below are allowed to be embedded images. Separate them by commas. <strong>e.g: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Add an asterisk (*) if you want to allow all domains.</strong></small>
+                                <small data-i18n-html="general.image_embedding_filter_hint">If enabled, only images from the domains below are allowed to be embedded images. Separate them by commas. <strong>e.g: <em>imgur.com,tenor.com,giphy.com</em></strong></small>
                             </div>
                         </div>
                     </div>
 
                     <div class="config full">
-                        <wa-input data-setting="imageEmbeddingFilterDomains" data-default="*" value="*"></wa-input>
+                        <wa-input data-setting="imageEmbeddingFilterDomains" data-default="" value=""></wa-input>
                     </div>
 
 
@@ -2052,11 +2082,11 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
     <script src="https://unpkg.com/@streamerbot/client/dist/streamerbot-client.js"></script>
 
-    <script src="js/i18n-settings.js?nocache=49"></script>
-    <script src="js/speakerbot.js?nocache=49"></script>
+    <script src="js/i18n-settings.js?nocache=50"></script>
+    <script src="js/speakerbot.js?nocache=50"></script>
 
-    <script src="js/audio.js?nocache=49"></script>
+    <script src="js/audio.js?nocache=50"></script>
     
-    <script type="module" src="js/settings.js?nocache=49"></script>
+    <script type="module" src="js/settings.js?nocache=50"></script>
 </body>
 </html>

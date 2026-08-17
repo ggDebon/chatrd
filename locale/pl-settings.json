@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Wybierz dźwięk, który chcesz odtwarzać.",
 		"sound_notifications_volume": "Głośność",
 		"sound_notifications_test": "Testuj Powiadomienie",
+		"sound_notifications_group": "Grupuj Co",
+		"sound_notifications_group_hint": "Odtwarza powiadomienie ponownie, jeśli kilka wiadomości nadejdzie pod rząd bez przerwy między nimi.",
+		"sound_notifications_interval": "Interwał Ciszy",
+		"sound_notifications_interval_hint": "Czas bez nowych wiadomości, zanim odtworzy się oczekujące powiadomienie.",
 		"group_messages": "Grupuj Wiadomości Czatu",
 		"group_messages_hint": "Kolejne wiadomości od tego samego użytkownika zostaną zgrupowane",
 		"avatars": "Awatary",
@@ -97,13 +101,15 @@
 		"platform_hint": "Pokazuje logo platform.",
 		"platform_statistics": "Statystyki Platformy",
 		"platform_statistics_hint": "Pokazuje wszystkie statystyki platform.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Połącz liczbę widzów z platform",
+    	"platform_views_combined_hint": "Łączy liczbę widzów ze wszystkich włączonych platform.",
 		"moderation_buttons": "Przyciski Moderacji",
 		"moderation_buttons_hint": "Dodaje przyciski do działań moderacyjnych.",
 		"chat_field": "Pole Czatu",
 		"chat_field_hint": "Dodaje pole czatu, w którym możesz pisać na swoim czacie.",
 		"chat_field_warning": "Pole Czatu obsługuje również <strong>/komendy</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Obsługiwane Komendy</a></strong>",
 		"image_embedding_filter": "Filtr Osadzania Obrazów",
-		"image_embedding_filter_hint": "Jeśli włączone, tylko obrazy z domen podanych poniżej mogą być osadzane jako obrazy. Rozdziel je przecinkami. <strong>np.: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Dodaj gwiazdkę (*), jeśli chcesz zezwolić na wszystkie domeny.</strong>"
+		"image_embedding_filter_hint": "Jeśli włączone, tylko obrazy z domen podanych poniżej mogą być osadzane jako obrazy. Rozdziel je przecinkami. <strong>np.: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

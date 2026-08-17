@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Selecione o som que deseja reproduzir.",
 		"sound_notifications_volume": "Volume",
 		"sound_notifications_test": "Testar Notificação",
+		"sound_notifications_group": "Agrupar a Cada",
+		"sound_notifications_group_hint": "Toca a notificação de novo se chegarem várias mensagens seguidas, sem pausa entre elas.",
+		"sound_notifications_interval": "Intervalo de Silêncio",
+		"sound_notifications_interval_hint": "Tempo sem mensagens novas até a notificação pendente tocar.",
 		"group_messages": "Agrupar Mensagens do Chat",
 		"group_messages_hint": "Mensagens consecutivas do mesmo usuário serão agrupadas",
 		"avatars": "Avatares",
@@ -97,13 +101,15 @@
 		"platform_hint": "Mostra os logos das plataformas.",
 		"platform_statistics": "Estatísticas da Plataforma",
 		"platform_statistics_hint": "Mostra todas as estatísticas das plataformas.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Combinar Espectadores das Plataformas",
+    	"platform_views_combined_hint": "Combina a contagem de espectadores de todas as plataformas ativadas.",
 		"moderation_buttons": "Botões de Moderação",
 		"moderation_buttons_hint": "Adiciona botões para ações de moderação.",
 		"chat_field": "Campo de Chat",
 		"chat_field_hint": "Adiciona um campo de chat para você digitar no seu chat.",
 		"chat_field_warning": "O Campo de Chat também aceita <strong>/comandos</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Comandos Suportados</a></strong>",
 		"image_embedding_filter": "Filtro de Incorporação de Imagens",
-		"image_embedding_filter_hint": "Se ativado, apenas imagens dos domínios abaixo poderão ser incorporadas como imagens. Separe-os por vírgulas. <strong>ex: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Adicione um asterisco (*) se quiser permitir todos os domínios.</strong>"
+		"image_embedding_filter_hint": "Se ativado, apenas imagens dos domínios abaixo poderão ser incorporadas como imagens. Separe-os por vírgulas. <strong>ex: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

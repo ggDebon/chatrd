@@ -38,13 +38,17 @@ userColors.set('tiktok', new Map());
 const tiktokMessageHandlers = {
 
     'General.Custom': (response) => {
-        if (response.data?.data?.eventName === 'TikTok.TikTools') {
+        /*if (response.data?.data?.eventName === 'TikTok.TikTools') {
             if (typeof response.data.data.event === 'object') {
                 console.debug(`[ChatRD][TikTok][Tik.Tools][${response.data.data.event.event}]`, response.data.data.event.data);
             }
             else {
                 console.debug(`[ChatRD][TikTok][Tik.Tools]`, response.data.data.event);
             }
+        }*/
+
+        if (response.data?.data?.eventName === 'TikTok.EulerStream') {
+            console.debug(`[ChatRD][TikTok][EulerStream][${response.data.data.event.type}]`, response.data.data.event.data);
         }
     }
 
@@ -73,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tiktokConnection();
             }
             if (tiktokService == 'tiktools') {
+                registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
+            }
+            if (tiktokService == 'eulerstream') {
                 registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
             }
             
@@ -125,7 +132,7 @@ async function tiktokConnection() {
                 case 'follow': tiktokFollowMessage(tiktokData); break;
                 case 'gift': tiktokGiftMessage(tiktokData); break;
                 case 'subscribe': tiktokSubMessage(tiktokData); break;
-                //default: console.debug(`[TikTok] ${data.event}`, data);
+                //default: console.debug(`[ChatRD][TikFinity][TikTok] ${data.event}`, data);
             }
         };
 

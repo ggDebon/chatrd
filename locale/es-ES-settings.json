@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Selecciona el sonido que deseas reproducir.",
 		"sound_notifications_volume": "Volumen",
 		"sound_notifications_test": "Probar Notificación",
+		"sound_notifications_group": "Agrupar Cada",
+		"sound_notifications_group_hint": "Reproduce la notificación de nuevo si llegan varios mensajes seguidos sin pausa entre ellos.",
+		"sound_notifications_interval": "Intervalo de Silencio",
+		"sound_notifications_interval_hint": "Tiempo sin mensajes nuevos antes de que suene una notificación pendiente.",
 		"group_messages": "Agrupar Mensajes del Chat",
 		"group_messages_hint": "Los mensajes consecutivos del mismo usuario se agruparán",
 		"avatars": "Avatares",
@@ -97,13 +101,15 @@
 		"platform_hint": "Muestra los logos de las plataformas.",
 		"platform_statistics": "Estadísticas de la Plataforma",
 		"platform_statistics_hint": "Muestra todas las estadísticas de las plataformas.",
+	    "platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Combinar Espectadores de Plataformas",
+    	"platform_views_combined_hint": "Combina el número de espectadores de todas las plataformas habilitadas.",	
 		"moderation_buttons": "Botones de Moderación",
 		"moderation_buttons_hint": "Agrega botones para acciones de moderación.",
 		"chat_field": "Campo de Chat",
 		"chat_field_hint": "Agrega un campo de chat para que escribas en tu chat.",
 		"chat_field_warning": "El Campo de Chat también acepta <strong>/comandos</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Comandos Soportados</a></strong>",
 		"image_embedding_filter": "Filtro de Incorporación de Imágenes",
-		"image_embedding_filter_hint": "Si está activado, solo se permite incorporar imágenes de los dominios indicados a continuación. Sepáralos por comas. <strong>ej: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Agrega un asterisco (*) si deseas permitir todos los dominios.</strong>"
+		"image_embedding_filter_hint": "Si está activado, solo se permite incorporar imágenes de los dominios indicados a continuación. Sepáralos por comas. <strong>ej: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

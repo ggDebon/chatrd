@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Seleziona il suono che vuoi riprodurre.",
 		"sound_notifications_volume": "Volume",
 		"sound_notifications_test": "Prova Notifica",
+		"sound_notifications_group": "Raggruppa Ogni",
+		"sound_notifications_group_hint": "Riproduce nuovamente la notifica se arrivano più messaggi di seguito senza pausa tra loro.",
+		"sound_notifications_interval": "Intervallo di Silenzio",
+		"sound_notifications_interval_hint": "Tempo senza nuovi messaggi prima che suoni una notifica in sospeso.",
 		"group_messages": "Raggruppa Messaggi della Chat",
 		"group_messages_hint": "I messaggi consecutivi dello stesso utente verranno raggruppati",
 		"avatars": "Avatar",
@@ -97,13 +101,15 @@
 		"platform_hint": "Mostra i loghi delle piattaforme.",
 		"platform_statistics": "Statistiche della Piattaforma",
 		"platform_statistics_hint": "Mostra tutte le statistiche delle piattaforme.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Combina Spettatori delle Piattaforme",
+    	"platform_views_combined_hint": "Combina il conteggio degli spettatori di tutte le piattaforme abilitate.",
 		"moderation_buttons": "Pulsanti di Moderazione",
 		"moderation_buttons_hint": "Aggiunge pulsanti per le azioni di moderazione.",
 		"chat_field": "Campo Chat",
 		"chat_field_hint": "Aggiunge un campo chat per scrivere nella tua chat.",
 		"chat_field_warning": "Il Campo Chat accetta anche i <strong>/comandi</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Comandi Supportati</a></strong>",
 		"image_embedding_filter": "Filtro di Incorporamento Immagini",
-		"image_embedding_filter_hint": "Se attivato, solo le immagini provenienti dai domini indicati di seguito potranno essere incorporate. Separale con una virgola. <strong>es: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Aggiungi un asterisco (*) se vuoi consentire tutti i domini.</strong>"
+		"image_embedding_filter_hint": "Se attivato, solo le immagini provenienti dai domini indicati di seguito potranno essere incorporate. Separale con una virgola. <strong>es: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

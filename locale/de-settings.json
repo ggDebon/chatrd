@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Wähle den Klang aus, den du abspielen möchtest.",
 		"sound_notifications_volume": "Lautstärke",
 		"sound_notifications_test": "Benachrichtigung Testen",
+		"sound_notifications_group": "Gruppieren Alle",
+		"sound_notifications_group_hint": "Spielt die Benachrichtigung erneut ab, wenn mehrere Nachrichten hintereinander ohne Pause eintreffen.",
+		"sound_notifications_interval": "Stille-Intervall",
+		"sound_notifications_interval_hint": "Zeit ohne neue Nachrichten, bevor eine ausstehende Benachrichtigung abgespielt wird.",
 		"group_messages": "Chatnachrichten Gruppieren",
 		"group_messages_hint": "Aufeinanderfolgende Nachrichten desselben Nutzers werden gruppiert",
 		"avatars": "Avatare",
@@ -97,13 +101,15 @@
 		"platform_hint": "Zeigt die Logos der Plattformen an.",
 		"platform_statistics": "Plattformstatistiken",
 		"platform_statistics_hint": "Zeigt alle Statistiken der Plattformen an.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Zuschauer aller Plattformen kombinieren",
+		"platform_views_combined_hint": "Kombiniert die Zuschauerzahlen aller aktivierten Plattformen.",
 		"moderation_buttons": "Moderationsschaltflächen",
 		"moderation_buttons_hint": "Fügt Schaltflächen für Moderatoraktionen hinzu.",
 		"chat_field": "Chat-Feld",
 		"chat_field_hint": "Fügt ein Chat-Feld hinzu, in das du in deinem Chat schreiben kannst.",
 		"chat_field_warning": "Das Chat-Feld akzeptiert auch <strong>/Befehle</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Unterstützte Befehle</a></strong>",
 		"image_embedding_filter": "Bild-Einbettungsfilter",
-		"image_embedding_filter_hint": "Wenn aktiviert, dürfen nur Bilder von den unten aufgeführten Domains eingebettet werden. Trenne sie durch Kommas. <strong>z. B.: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Füge ein Sternchen (*) hinzu, wenn du alle Domains zulassen möchtest.</strong>"
+		"image_embedding_filter_hint": "Wenn aktiviert, dürfen nur Bilder von den unten aufgeführten Domains eingebettet werden. Trenne sie durch Kommas. <strong>z. B.: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",

@@ -81,6 +81,10 @@
 		"sound_notifications_list_hints": "Piliin ang sound na gusto mong i-play.",
 		"sound_notifications_volume": "Volume",
 		"sound_notifications_test": "I-test ang Notification",
+		"sound_notifications_group": "Pagsamahin Bawat",
+		"sound_notifications_group_hint": "Ipe-play muli ang notification kung sunud-sunod na dumating ang ilang mensahe nang walang puwang sa pagitan.",
+		"sound_notifications_interval": "Agwat ng Katahimikan",
+		"sound_notifications_interval_hint": "Panahon na walang bagong mensahe bago tumunog ang naka-pending na notification.",
 		"group_messages": "Pagsamahin ang mga Mensahe sa Chat",
 		"group_messages_hint": "Pagsasamahin ang magkakasunod na mensahe mula sa parehong user",
 		"avatars": "Mga Avatar",
@@ -97,13 +101,15 @@
 		"platform_hint": "Ipinapakita ang mga logo ng platform.",
 		"platform_statistics": "Estadistika ng Platform",
 		"platform_statistics_hint": "Ipinapakita ang lahat ng estadistika ng mga platform.",
+		"platform_views_combined": "<i class=\"ri-corner-down-right-line\"></i> Pagsamahin ang Manonood sa Platform",
+    	"platform_views_combined_hint": "Pinagsasama ang bilang ng manonood mula sa lahat ng naka-enable na platform.",
 		"moderation_buttons": "Mga Button ng Moderation",
 		"moderation_buttons_hint": "Nagdaragdag ng mga button para sa mga aksyon ng moderation.",
 		"chat_field": "Chat Field",
 		"chat_field_hint": "Nagdaragdag ng chat field kung saan puwede kang mag-type sa iyong chat.",
 		"chat_field_warning": "Tinatanggap din ng Chat Field ang mga <strong>/command</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Mga Suportadong Command</a></strong>",
 		"image_embedding_filter": "Image Embedding Filter",
-		"image_embedding_filter_hint": "Kung naka-enable, mga larawan lang mula sa mga domain sa ibaba ang pwedeng i-embed. Paghiwalayin ang mga ito gamit ang kuwit. <strong>hal: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Magdagdag ng asterisk (*) kung gusto mong payagan ang lahat ng domain.</strong>"
+		"image_embedding_filter_hint": "Kung naka-enable, mga larawan lang mula sa mga domain sa ibaba ang pwedeng i-embed. Paghiwalayin ang mga ito gamit ang kuwit. <strong>hal: <em>imgur.com,tenor.com,giphy.com</em></strong>"
 	},
 	"twitch": {
 		"title": "Twitch",
