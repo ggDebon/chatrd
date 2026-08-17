@@ -170,7 +170,7 @@ async function youTubeChatMessage(data) {
 
 
 
-    var color = await createRandomColor('youtube', data.user.name);
+    var color = '#f1f1f1';
     
     
 

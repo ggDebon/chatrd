@@ -79,7 +79,7 @@
     "bits_plural":             "bits",
     "sub_action":              " subscribed for ",
     "resub_action":            " subscribed for ",
-    "giftsub_action":          " gifted <strong>{months}</strong> of Tier <strong>{tier}</strong> <strong>{duration}</strong> to ",
+    "giftsub_action":          " gifted <strong>{months}</strong> to ",
     "giftsub_singular":        "subscription",
     "giftsub_plural":          "subscriptions",
     "giftbomb_action":         " gifted <strong>{total}</strong> Tier <strong>{tier} {subs}</strong> to the Community",
