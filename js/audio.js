@@ -17,12 +17,20 @@ const audioCache = new Map();
 
 async function chatrdPlaySound(soundName, volume = 1.0) {
     const SOUND_DIRECTORY = 'sounds/';
+
+    // 1. Valida o tipo antes de manipular a string
+    if (typeof soundName !== 'string' || soundName.trim() === '') {
+        console.warn('[ChatRD][Play Sound][Blocked] soundName inválido:', typeof soundName);
+        return Promise.resolve(false);
+    }
+
     const cleanName = soundName
         .split('/').pop().split('\\').pop()
         .replace(/\.mp3$/i, '');
 
     if (!ALLOWED_SOUNDS.has(cleanName)) {
-        console.warn(`[ChatRD][Play Sound][Blocked] The sound "${soundName}" is not allowed.`);
+        // 2. Loga apenas o valor já sanitizado, nunca o input bruto
+        console.warn(`[ChatRD][Play Sound][Blocked] The sound "${cleanName}" is not allowed.`);
         return Promise.resolve(false);
     }
 
@@ -30,7 +38,7 @@ async function chatrdPlaySound(soundName, volume = 1.0) {
     console.debug(`[ChatRD][Play Sound] Attempting to play "${soundFile}"...`);
 
     if (!audioCache.has(cleanName)) {
-        audioCache.set(cleanName, new Audio(`${SOUND_DIRECTORY}${cleanName}.mp3`));
+        audioCache.set(cleanName, new Audio(soundFile));
     }
     const cached = audioCache.get(cleanName);
     const audio = cached.cloneNode();
