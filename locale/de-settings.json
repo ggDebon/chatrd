@@ -60,8 +60,8 @@
 			"none": "Keine Animation"
 		},
 		"orientation": "Ausrichtung",
-		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Textausrichtung",
-		"text_alignment_options" : {
+		"text_alignment": "<i class=\"ri-corner-down-right-line\"></i> Textausrichtung",
+		"text_alignment_options": {
 			"left_to_right": "Von links nach rechts",
 			"right_to_left": "Von rechts nach links",
 			"centered": "Zentriert"
@@ -73,6 +73,14 @@
 			"twitch_chat": "Wie im Twitch-Chat"
 		},
 		"orientation_warning": "Die Chat-Ausrichtung <strong>funktioniert nicht, wenn das Chat-Layout auf <u>Horizontal</u> eingestellt ist</strong>.",
+		"sound_notifications": "Ton-Benachrichtigungen",
+		"sound_notifications_hints": "Spielt bei jeder neuen Nachricht eine Audio-Benachrichtigung ab.",
+		"sound_notifications_chat": "<i class=\"ri-corner-down-right-line\"></i> Bei Chat-Nachrichten Abspielen",
+		"sound_notifications_events": "<i class=\"ri-corner-down-right-line\"></i> Bei Events Abspielen",
+		"sound_notifications_list": "Klangliste",
+		"sound_notifications_list_hints": "Wähle den Klang aus, den du abspielen möchtest.",
+		"sound_notifications_volume": "Lautstärke",
+		"sound_notifications_test": "Benachrichtigung Testen",
 		"group_messages": "Chatnachrichten Gruppieren",
 		"group_messages_hint": "Aufeinanderfolgende Nachrichten desselben Nutzers werden gruppiert",
 		"avatars": "Avatare",
@@ -93,7 +101,9 @@
 		"moderation_buttons_hint": "Fügt Schaltflächen für Moderatoraktionen hinzu.",
 		"chat_field": "Chat-Feld",
 		"chat_field_hint": "Fügt ein Chat-Feld hinzu, in das du in deinem Chat schreiben kannst.",
-		"chat_field_warning": "Das Chat-Feld akzeptiert auch <strong>/Befehle</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Unterstützte Befehle</a></strong>"
+		"chat_field_warning": "Das Chat-Feld akzeptiert auch <strong>/Befehle</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Unterstützte Befehle</a></strong>",
+		"image_embedding_filter": "Bild-Einbettungsfilter",
+		"image_embedding_filter_hint": "Wenn aktiviert, dürfen nur Bilder von den unten aufgeführten Domains eingebettet werden. Trenne sie durch Kommas. <strong>z. B.: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Füge ein Sternchen (*) hinzu, wenn du alle Domains zulassen möchtest.</strong>"
 	},
 	"twitch": {
 		"title": "Twitch",
@@ -230,6 +240,7 @@
 	"tiktok": {
 		"title": "TikTok",
 		"chat_field_warning": "Wenn du das <strong>Chat-Feld</strong> aktiviert hast, musst du <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd/?tab=readme-ov-file#-sending-messages-to-tiktok\">den Anweisungen folgen</a></strong>, um Nachrichten an TikTok zu senden. Oder <a href=\"https://youtu.be/udV_VARURgU?si=ofj_20Po1_HQIr2_&t=104\" target=\"_blank\">sieh dir mein Video-Tutorial an</a> 😊",
+		"chat_field_warning_disabled_tikfinity": "<strong>ACHTUNG:</strong> Das Chat-Feld für TikTok wurde <strong>vorübergehend deaktiviert.</strong> TikFinity hat Probleme mit der TikTok-Verbindung. <a href=\"https://imgur.com/a/B2B26Hs\" target=\"_blank\">Mehr dazu erfahren</a>.",
 		"chat": "Chat",
 		"followers": "Follower",
 		"likes": "Likes",
@@ -241,6 +252,13 @@
 		"statistics_hint": "Zeigt Zuschauer und Likes von TikTok an",
 		"role_selection": "Speaker.bot-Rollen",
 		"role_selection_hint": "Wenn Speaker.bot aktiviert ist, werden nur die unten ausgewählten Rollen per TTS vorgelesen. <strong>Ereignisse werden dadurch nicht gefiltert.</strong>",
+		"service_provider": "Dienstanbieter",
+		"tiktok_user": "TikTok-Benutzername",
+		"service_save_button": "Dienstinformationen Speichern",
+		"service_save_button_hint": "Nachdem du den Dienstanbieter, den TikTok-Benutzernamen und/oder den TikTools-API-Schlüssel geändert hast, ist es wichtig, auf die Schaltfläche <strong>Dienstinformationen Speichern</strong> zu klicken.",
+		"tikfinity_hint": "Um TikFinity zu nutzen, musst du <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">deren Desktop-App herunterladen</a> und den Anweisungen folgen. Für weitere Informationen <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">sieh dir das Tutorial an</a>.",
+		"tiktools_warning": "<strong>ACHTUNG:</strong> Die Nutzung von Tik.Tools ist <strong><u>extrem experimentell</u></strong> und hat <strong><u>Ratenbegrenzungen</u>!</strong>",
+		"tiktools_hint": "Um Tik.Tools zu nutzen, musst du auf <a href=\"https://tik.tools/\" target=\"_blank\">deren Website</a> ein Konto erstellen und den API-Schlüssel hier verwenden. Behalte außerdem <strong>dein tägliches Kontingent in <a href=\"https://tik.tools/dashboard\" target=\"_blank\">deinem Dashboard</a> im Auge.<br>Ändere den obigen Benutzernamen nicht während eines Livestreams, sonst verbrauchst du deine kostenlosen Sitzungen.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mods",

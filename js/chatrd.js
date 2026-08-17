@@ -24,6 +24,13 @@ const outline                       = getURLParam("outline", false);
 const animation                     = getURLParam("animation", "default");
 const orientation                   = getURLParam("orientation", "btt");
 const direction                     = getURLParam("direction", "ltr");
+
+const playSound                     = getURLParam("playSound", false);
+const playSoundOnChat               = getURLParam("playSoundOnChat", false);
+const playSoundOnEvents             = getURLParam("playSoundOnEvents", false);
+const playSoundVolume               = getURLParam("playSoundVolume", 0.5);
+const playSoundFile                 = getURLParam("playSoundFile", "retro-game");
+
 const chatBackground                = getURLParam("chatBackground", "#121212"); 
 const chatBackgroundOpacity         = getURLParam("chatBackgroundOpacity", 0); 
 const scrollbar                     = getURLParamLegacy("chatScrollBar", () => getURLParam("scrollbar", false));
@@ -66,6 +73,12 @@ const youtubeTTSRoles        = getURLParam("youtubeTTSRoles", "user");
 const kickTTSRoles           = getURLParam("kickTTSRoles", "user");
 const tiktokTTSRoles         = getURLParam("tiktokTTSRoles", "user");
 
+const imageEmbeddingFilter   = getURLParam("imageEmbeddingFilter", false);
+const imageEmbeddingFilterDomains   = getURLParam("imageEmbeddingFilterDomains", "*");
+
+
+
+
 /* Idem — montado uma única vez (antes era recriado a cada chamada
    de speakerBotTTSRead) */
 const embedTTSConfig = {
@@ -81,12 +94,14 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=47",
-    nutting: "skin-nutting.css?nocache=47",
-    kimballs: "skin-kimballs.css?nocache=47",
-    bubbles: "skin-bubbles.css?nocache=47",
-    'star-wars': "skin-star-wars.css?nocache=47"
+    default: "skin-default.css?nocache=48",
+    nutting: "skin-nutting.css?nocache=48",
+    kimballs: "skin-kimballs.css?nocache=48",
+    bubbles: "skin-bubbles.css?nocache=48",
+    'star-wars': "skin-star-wars.css?nocache=48"
 };
+
+
 
 const skinFile = SKINS[skin] || SKINS.default;
 const skinLink = document.getElementById("chatrd-skins");
@@ -136,6 +151,7 @@ if (chatField) {
     const chatfieldelement = document.getElementById("chat-input");
     chatfieldelement.style.display = '';
 }
+
 
 
 async function animateItemEntry(root, messageid) {
@@ -343,6 +359,11 @@ function addMessageItem(platform, clone, classes, userid, messageid) {
     }
 
     animateItemEntry(root, messageid);
+
+    if (playSound && playSoundOnChat) {
+        chatrdPlaySound(playSoundFile, playSoundVolume);
+    }
+
 }
 
 function applyEventPlatformIcon(platform, root, platformElement) {
@@ -391,8 +412,12 @@ function addEventItem(platform, clone, classes, userid, messageid) {
             timestamp.remove();
         }
     }
-
+    
     animateItemEntry(root, messageid);
+    
+    if (playSound && playSoundOnEvents) {
+        chatrdPlaySound(playSoundFile, playSoundVolume);
+    }
 }
 
 async function preloadAndPrepend(container, fragment) {
@@ -738,12 +763,12 @@ async function pushChatInputSettings() {
 
     const twitchSwitch = chatInputPlatformButtons.querySelector('#twitch');
     const youtubeSwitch = chatInputPlatformButtons.querySelector('#youtube');
-    const tiktokSwitch = chatInputPlatformButtons.querySelector('#tiktok');
+    //const tiktokSwitch = chatInputPlatformButtons.querySelector('#tiktok');
     const kickSwitch = chatInputPlatformButtons.querySelector('#kick');
 
     if (showTwitch == false) { twitchSwitch.classList.add('hidden'); }
     if (showYoutube == false) { youtubeSwitch.classList.add('hidden'); }
-    if (showTiktok == false) { tiktokSwitch.classList.add('hidden'); }
+    //if (showTiktok == false) { tiktokSwitch.classList.add('hidden'); }
     if (showKick == false) { kickSwitch.classList.add('hidden'); }
 
     pushChatInputButtonsToSettings();
@@ -768,12 +793,11 @@ chatInputForm.addEventListener("submit", function(event) {
     const sendTwitchMessages = chatSettings.querySelector('input[type=checkbox][name="sendTwitchMessages"]').checked;
     const sendYouTubeMessages = chatSettings.querySelector('input[type=checkbox][name="sendYouTubeMessages"]').checked;
     //const sendTikTokMessages = chatSettings.querySelector('input[type=checkbox][name="sendTikTokMessages"]').checked;
-    const sendTikTokMessages = false;
     const sendKickMessages = chatSettings.querySelector('input[type=checkbox][name="sendKickMessages"]').checked;
 
     if (showTwitch == true && showTwitchMessages == true && sendTwitchMessages == true) { chatSendPlatforms.push('twitch'); }
     if (showYoutube == true && showYouTubeMessages == true && sendYouTubeMessages == true) { chatSendPlatforms.push('youtube'); }
-    if (showTiktok == true && showTikTokMessages == true && sendTikTokMessages == true) { chatSendPlatforms.push('tiktok'); }
+    //if (showTiktok == true && showTikTokMessages == true && sendTikTokMessages == true) { chatSendPlatforms.push('tiktok'); }
     if (showKick == true && showKickMessages == true && sendKickMessages == true) { chatSendPlatforms.push('kick'); }
 
     chatSendPlatforms = chatSendPlatforms.join(',');
@@ -790,7 +814,7 @@ chatInputForm.addEventListener("submit", function(event) {
     });
     
     
-    if (chatSendPlatforms.includes('tiktok')) {
+    /*if (chatSendPlatforms.includes('tiktok')) {
         if (!chatInputText.startsWith('/')) {
             streamerBotClient.doAction(
             { name : "[TikTok] Msgs" },
@@ -801,7 +825,7 @@ chatInputForm.addEventListener("submit", function(event) {
                 console.debug('[ChatRD] Sending TikTok Chat to Streamer.Bot', sendchatstuff);
             });
         }
-    }
+    }*/
 
     chatInput.value = '';
 });
@@ -910,12 +934,68 @@ async function executeModCommand(event, command) {
     chatInputForm.requestSubmit();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+function parseAllowedDomains(filterList) {
+	const trimmedFilter = filterList.trim();
+	if (trimmedFilter === '*') return '*';
+
+	return trimmedFilter
+		.split(',')
+		.map(domain => domain
+			.trim()
+			.toLowerCase()
+			.replace(/^https?:\/\//, '')
+			.replace(/\/.*$/, '')
+		)
+		.filter(domain => domain.length > 0 && domain.includes('.'));
+}
+
+
+function isDomainAllowed(rawUrl, domains) {
+	if (domains === '*') return true;
+	if (!domains || domains.length === 0) return false;
+
+	let hostname;
+	try {
+		const fullUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
+		hostname = new URL(fullUrl).hostname.toLowerCase().replace(/\.$/, '');
+	}
+    catch {
+		return false;
+	}
+
+	const hostParts = hostname.split('.');
+
+	return domains.some(domain => {
+		const domainParts = domain.split('.');
+		if (hostParts.length < domainParts.length) return false;
+		const tail = hostParts.slice(-domainParts.length);
+		return tail.join('.') === domain;
+	});
+}
+
+
+const allowedImageDomains = imageEmbeddingFilter
+	? parseAllowedDomains(imageEmbeddingFilterDomains)
+	: null;
+
 async function getAndReplaceLinks(platform, element) {
 	const el = element.querySelector('.actual-message');
 	const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
 	const urlRegex = /\b((?:https?:\/\/|www\.)[^\s<>"')]+)\b/g;
 	const singleUrlRegex = /^((?:https?:\/\/|www\.)[^\s<>"')]+)$/;
 	const imageExtRegex = /\.(jpe?g|png|gif|webp)(\?.*)?$/i;
+	const invisibleCharsRegex = /[\u200B-\u200D\uFEFF\u034F\u2800\u{E0000}-\u{E007F}]/gu;
 	const nodes = [];
 
 	while (walker.nextNode()) {
@@ -980,6 +1060,7 @@ async function getAndReplaceLinks(platform, element) {
 		img.src = proxiedSrc;
 
 		img.onerror = () => {
+			console.warn('[ChatRD] Falha ao carregar imagem via proxy:', proxiedSrc, '| original:', rawUrl);
 			img.replaceWith(createLink(rawUrl));
 		};
 
@@ -987,7 +1068,7 @@ async function getAndReplaceLinks(platform, element) {
 	}
 
 	nodes.forEach(node => {
-		const text = node.nodeValue;
+		const text = node.nodeValue.replace(invisibleCharsRegex, '');
 
 		const isWholeMessageLink = node === wholeMessageTextNode && singleUrlRegex.test(text.trim());
 
@@ -1003,7 +1084,10 @@ async function getAndReplaceLinks(platform, element) {
 
 			const clean = raw.replace(/[.,!?;:)\]\}]+$/, '');
 
-			let isImage = isWholeMessageLink && imageExtRegex.test(clean);
+			let isImage = isWholeMessageLink
+				&& imageExtRegex.test(clean)
+				&& (!imageEmbeddingFilter || isDomainAllowed(clean, allowedImageDomains));
+
 			if (isImage && embedImageConfig[platform]) {
 				const config = embedImageConfig[platform];
 				if (!config.enabled) {
@@ -1037,6 +1121,23 @@ async function getAndReplaceLinks(platform, element) {
 		node.parentNode.replaceChild(frag, node);
 	});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const _escapeDiv = document.createElement('div');
 function escapeHTML(str) {

@@ -60,8 +60,8 @@
 			"none": "Walang Animation"
 		},
 		"orientation": "Oryentasyon",
-		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Pagkakahanay ng Teksto",
-		"text_alignment_options" : {
+		"text_alignment": "<i class=\"ri-corner-down-right-line\"></i> Pagkakahanay ng Teksto",
+		"text_alignment_options": {
 			"left_to_right": "Mula Kaliwa Pakanan",
 			"right_to_left": "Mula Kanan Pakaliwa",
 			"centered": "Nasa Gitna"
@@ -73,6 +73,14 @@
 			"twitch_chat": "Kagaya ng Twitch Chat"
 		},
 		"orientation_warning": "Ang Oryentasyon ng Chat <strong>ay hindi gagana kung ang Layout ng Chat ay naka-set sa <u>Horizontal</u></strong>.",
+		"sound_notifications": "Mga Sound Notification",
+		"sound_notifications_hints": "Nagpi-play ng audio notification para sa bawat bagong mensahe.",
+		"sound_notifications_chat": "<i class=\"ri-corner-down-right-line\"></i> I-play sa mga Mensahe sa Chat",
+		"sound_notifications_events": "<i class=\"ri-corner-down-right-line\"></i> I-play sa mga Event",
+		"sound_notifications_list": "Listahan ng Sound",
+		"sound_notifications_list_hints": "Piliin ang sound na gusto mong i-play.",
+		"sound_notifications_volume": "Volume",
+		"sound_notifications_test": "I-test ang Notification",
 		"group_messages": "Pagsamahin ang mga Mensahe sa Chat",
 		"group_messages_hint": "Pagsasamahin ang magkakasunod na mensahe mula sa parehong user",
 		"avatars": "Mga Avatar",
@@ -93,7 +101,9 @@
 		"moderation_buttons_hint": "Nagdaragdag ng mga button para sa mga aksyon ng moderation.",
 		"chat_field": "Chat Field",
 		"chat_field_hint": "Nagdaragdag ng chat field kung saan puwede kang mag-type sa iyong chat.",
-		"chat_field_warning": "Tinatanggap din ng Chat Field ang mga <strong>/command</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Mga Suportadong Command</a></strong>"
+		"chat_field_warning": "Tinatanggap din ng Chat Field ang mga <strong>/command</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Mga Suportadong Command</a></strong>",
+		"image_embedding_filter": "Image Embedding Filter",
+		"image_embedding_filter_hint": "Kung naka-enable, mga larawan lang mula sa mga domain sa ibaba ang pwedeng i-embed. Paghiwalayin ang mga ito gamit ang kuwit. <strong>hal: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Magdagdag ng asterisk (*) kung gusto mong payagan ang lahat ng domain.</strong>"
 	},
 	"twitch": {
 		"title": "Twitch",
@@ -230,6 +240,7 @@
 	"tiktok": {
 		"title": "TikTok",
 		"chat_field_warning": "Kung naka-enable ang iyong <strong>Chat Field</strong>, kailangan mong <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd/?tab=readme-ov-file#-sending-messages-to-tiktok\">sundin ang mga instruksyon</a></strong> para makapagpadala ng mensahe sa TikTok. O kaya <a href=\"https://youtu.be/udV_VARURgU?si=ofj_20Po1_HQIr2_&t=104\" target=\"_blank\">Panoorin ang Aking Video Tutorial</a> 😊",
+		"chat_field_warning_disabled_tikfinity": "<strong>BABALA:</strong> Ang Chat Field para sa TikTok ay <strong>pansamantalang na-disable.</strong> May isyu ang TikFinity sa connectivity nito sa TikTok. <a href=\"https://imgur.com/a/B2B26Hs\" target=\"_blank\">Alamin pa ang tungkol dito</a>.",
 		"chat": "Chat",
 		"followers": "Mga Follower",
 		"likes": "Mga Like",
@@ -241,6 +252,13 @@
 		"statistics_hint": "Ipinapakita ang mga Viewer at Like sa TikTok",
 		"role_selection": "Mga Role ng Speaker.bot",
 		"role_selection_hint": "Kapag naka-enable ang Speaker.bot, ang mga role lamang na napili sa ibaba ang magkakaroon ng mensaheng babasahin ng TTS. <strong>Hindi ma-filter dito ang mga event.</strong>",
+		"service_provider": "Service Provider",
+		"tiktok_user": "TikTok Username",
+		"service_save_button": "I-save ang Service Information",
+		"service_save_button_hint": "Pagkatapos baguhin ang Service Provider, TikTok Username, at/o TikTools API key, mahalagang i-click ang button na <strong>I-save ang Service Information</strong>.",
+		"tikfinity_hint": "Para gamitin ang TikFinity, kailangan mong <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">i-download ang kanilang desktop app</a> at sundin ang mga instruksyon. Para sa karagdagang impormasyon, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">panoorin ang Tutorial</a>.",
+		"tiktools_warning": "<strong>BABALA:</strong> Ang paggamit ng Tik.Tools ay <strong><u>sobrang experimental</u></strong> at may <strong><u>rate limits</u>!</strong>",
+		"tiktools_hint": "Para gamitin ang Tik.Tools, kailangan mong gumawa ng account sa <a href=\"https://tik.tools/\" target=\"_blank\">kanilang website</a> at gamitin ang API KEY dito. Bukod dito, <strong>bantayan ang iyong daily quota sa <a href=\"https://tik.tools/dashboard\" target=\"_blank\">iyong dashboard.</a><br>Huwag baguhin ang username sa itaas habang naka-live, o mauubos ang iyong mga libreng session.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mga Mod",

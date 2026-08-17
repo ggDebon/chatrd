@@ -196,7 +196,6 @@ async function tiktokChatMessage(data) {
     
     if (!data?.comment) { data.comment = " "; }
     if (showTikTokMessages == false) return;
-    //if (ignoreUserList.includes(data.nickname.toLowerCase())) return;
     if (ignoreUserList.includes(data.uniqueId.toLowerCase())) return;
     if (data.comment.startsWith("!") && excludeCommands == true) return;
 
@@ -270,6 +269,7 @@ async function tiktokChatMessage(data) {
 
     addMessageItem('tiktok', clone, classes, userId, messageId);
 }
+
 
 
 
@@ -698,7 +698,7 @@ async function getTiktokRoles(data) {
         { min: 50, max: 500, class: 'fan-fifty' },
     ];
 
-    if (userBadges.length > 0) {
+    if (userBadges?.length > 0) {
         userBadges.forEach(badge => {
             // Top Gifter Badges
             if (badge.badgeSceneType === 6) rolesArray.push(`top-gifter-${badge.displayType}`);

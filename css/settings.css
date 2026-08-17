@@ -288,6 +288,31 @@ header h1 {
     align-items: baseline;
 }
 
+
+
+#settings .config.full wa-button {
+    margin: 10px 0 0 0;
+    width: 100%;
+}
+
+#settings .config.full wa-button::part(base) {
+    background-color: #292929;
+    border: 1px solid transparent;
+    transition: var(--transition);
+}
+
+#settings .config.full wa-button::part(base):hover {
+    border-color: #dbb048;
+}
+
+#settings .config.align-middle {
+    align-items: center;
+}
+
+#settings .config.full wa-input {
+    width: 100%;
+}
+
 #settings .config .info {
     line-height: 1.25;
 }
@@ -313,6 +338,8 @@ header h1 {
 #settings .config.layout .element wa-button.enabled::part(base) {
     border: 1px solid #DBB048;
 }
+
+
 
 
 
@@ -433,7 +460,9 @@ header h1 {
 #settings wa-details#kofi i { color: #72a5f2; }
 #settings wa-details#fourthwall i { color: #0042ff; }
 
-
+#settings wa-details#tiktok wa-button.success::part(base) {
+    background-color: #00dd63;
+}
 
 #settings #layout-checkboxes {
     display: none;

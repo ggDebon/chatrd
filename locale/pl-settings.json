@@ -60,8 +60,8 @@
 			"none": "Brak animacji"
 		},
 		"orientation": "Orientacja",
-		"text_alignment" : "<i class=\"ri-corner-down-right-line\"></i> Wyrównanie tekstu",
-		"text_alignment_options" : {
+		"text_alignment": "<i class=\"ri-corner-down-right-line\"></i> Wyrównanie tekstu",
+		"text_alignment_options": {
 			"left_to_right": "Od lewej do prawej",
 			"right_to_left": "Od prawej do lewej",
 			"centered": "Wyśrodkowane"
@@ -73,6 +73,14 @@
 			"twitch_chat": "Tak samo jak na czacie Twitch"
 		},
 		"orientation_warning": "Orientacja czatu <strong>nie będzie działać, jeśli Układ czatu jest ustawiony na <u>Poziomy</u></strong>.",
+		"sound_notifications": "Powiadomienia Dźwiękowe",
+		"sound_notifications_hints": "Odtwarza powiadomienie dźwiękowe dla każdej nowej wiadomości.",
+		"sound_notifications_chat": "<i class=\"ri-corner-down-right-line\"></i> Odtwarzaj przy Wiadomościach na Czacie",
+		"sound_notifications_events": "<i class=\"ri-corner-down-right-line\"></i> Odtwarzaj przy Wydarzeniach",
+		"sound_notifications_list": "Lista Dźwięków",
+		"sound_notifications_list_hints": "Wybierz dźwięk, który chcesz odtwarzać.",
+		"sound_notifications_volume": "Głośność",
+		"sound_notifications_test": "Testuj Powiadomienie",
 		"group_messages": "Grupuj Wiadomości Czatu",
 		"group_messages_hint": "Kolejne wiadomości od tego samego użytkownika zostaną zgrupowane",
 		"avatars": "Awatary",
@@ -93,7 +101,9 @@
 		"moderation_buttons_hint": "Dodaje przyciski do działań moderacyjnych.",
 		"chat_field": "Pole Czatu",
 		"chat_field_hint": "Dodaje pole czatu, w którym możesz pisać na swoim czacie.",
-		"chat_field_warning": "Pole Czatu obsługuje również <strong>/komendy</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Obsługiwane Komendy</a></strong>"
+		"chat_field_warning": "Pole Czatu obsługuje również <strong>/komendy</strong>. <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd#-commands-supported-by-the-chat-field\">Obsługiwane Komendy</a></strong>",
+		"image_embedding_filter": "Filtr Osadzania Obrazów",
+		"image_embedding_filter_hint": "Jeśli włączone, tylko obrazy z domen podanych poniżej mogą być osadzane jako obrazy. Rozdziel je przecinkami. <strong>np.: <em>imgur.com,tenor.com,giphy.com</em></strong><br><strong>Dodaj gwiazdkę (*), jeśli chcesz zezwolić na wszystkie domeny.</strong>"
 	},
 	"twitch": {
 		"title": "Twitch",
@@ -230,6 +240,7 @@
 	"tiktok": {
 		"title": "TikTok",
 		"chat_field_warning": "Jeśli masz włączone <strong>Pole Czatu</strong>, musisz <strong><a target=\"_blank\" href=\"https://github.com/vortisrd/chatrd/?tab=readme-ov-file#-sending-messages-to-tiktok\">postępować zgodnie z instrukcjami</a></strong>, aby wysyłać wiadomości do TikToka. Lub <a href=\"https://youtu.be/udV_VARURgU?si=ofj_20Po1_HQIr2_&t=104\" target=\"_blank\">Obejrzyj Mój Samouczek Wideo</a> 😊",
+		"chat_field_warning_disabled_tikfinity": "<strong>UWAGA:</strong> Pole Czatu dla TikToka zostało <strong>tymczasowo wyłączone.</strong> TikFinity ma problemy z połączeniem z TikTokiem. <a href=\"https://imgur.com/a/B2B26Hs\" target=\"_blank\">Dowiedz się więcej</a>.",
 		"chat": "Czat",
 		"followers": "Obserwujący",
 		"likes": "Polubienia",
@@ -241,6 +252,13 @@
 		"statistics_hint": "Pokazuje Widzów i Polubienia TikTok",
 		"role_selection": "Role Speaker.bot",
 		"role_selection_hint": "Jeśli Speaker.bot jest włączony, tylko role zaznaczone poniżej będą miały swoje wiadomości odczytywane przez TTS. <strong>Wydarzenia nie będą filtrowane w ten sposób.</strong>",
+		"service_provider": "Dostawca Usługi",
+		"tiktok_user": "Nazwa Użytkownika TikTok",
+		"service_save_button": "Zapisz Informacje o Usłudze",
+		"service_save_button_hint": "Po zmianie Dostawcy Usługi, Nazwy Użytkownika TikTok i/lub klucza API TikTools, ważne jest kliknięcie przycisku <strong>Zapisz Informacje o Usłudze</strong>.",
+		"tikfinity_hint": "Aby korzystać z TikFinity, musisz <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">pobrać ich aplikację desktopową</a> i postępować zgodnie z instrukcjami. Aby uzyskać więcej informacji, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">obejrzyj Samouczek</a>.",
+		"tiktools_warning": "<strong>UWAGA:</strong> Korzystanie z Tik.Tools jest <strong><u>bardzo eksperymentalne</u></strong> i ma <strong><u>limity zapytań</u>!</strong>",
+		"tiktools_hint": "Aby korzystać z Tik.Tools, musisz założyć konto na <a href=\"https://tik.tools/\" target=\"_blank\">ich stronie</a> i użyć tutaj klucza API. Poza tym <strong>pilnuj swojego dziennego limitu na <a href=\"https://tik.tools/dashboard\" target=\"_blank\">swoim dashboardzie.</a><br>Nie zmieniaj nazwy użytkownika powyżej podczas transmisji na żywo, bo stracisz swoje darmowe sesje.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Moderatorzy",

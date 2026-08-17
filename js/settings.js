@@ -123,20 +123,20 @@ async function loadChatRDTiktokService() {
 
     catch (err) {
         console.warn('[ChatRD][Settings][TikTok] TikTok Service Variables not found. Creating them...');
-        
-        await streamerBot.client.doAction(
-            { name: "[TikTok][TikTools] Service" },
-            {
-                "chatrdTiktokService": tiktokServiceUsedSelected,
-                "chatrdTiktokUser": tiktokServiceUserInput,
-                "chatrdTikToolsApiKey": tiktokServiceApiKeyInput,
-            }
-        ).then((res) => {
+
+        await streamerBot.client.doAction({
+        name: "[TikTok][TikTools] Connection" },
+        {
+            "chatrdTiktokFunction": "SaveSettings(service,user,apiKey)",
+            "service": tiktokServiceUsedSelected,
+            "user": tiktokServiceUserInput,
+            "apiKey": tiktokServiceApiKeyInput,
+        }).then((res) => {
             console.debug('[ChatRD][Settings][TikTok] TikTok Service Variables were created.');
         });
+
     }
 }
-
 
 
 async function setChatRDTiktokService(service, user, apiKey) {
@@ -145,21 +145,14 @@ async function setChatRDTiktokService(service, user, apiKey) {
         console.warn(`[ChatRD][Settings][TikTok] Streamer.bot is not connected.`);
         return;
     }
-
-    document.querySelectorAll('[data-tiktok-service]').forEach((el) => {
-        el.style.display = 'none';
-    });
-
-    document.querySelectorAll(`[data-tiktok-service="${service}"]`).forEach((el) => {
-        el.style.display = '';
-    });
     
     await streamerBot.client.doAction({
-        name: "[TikTok][TikTools] Service" },
+        name: "[TikTok][TikTools] Connection" },
         {
-            "chatrdTiktokService": service,
-            "chatrdTiktokUser": user,
-            "chatrdTikToolsApiKey": apiKey,
+            "chatrdTiktokFunction": "SaveSettings(service,user,apiKey)",
+            "service": service,
+            "user": user,
+            "apiKey": apiKey,
         });
 }
 
@@ -235,21 +228,49 @@ async function bindChatRDSettings() {
         });
 	});
 
-    //bindTikTokSettings()
+    document.querySelector(`#playSoundButton`).addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const soundFile = document.querySelector(`[data-setting="playSoundFile"]`).value;
+        const soundVolume = document.querySelector(`[data-setting="playSoundVolume"]`).value;
+
+        await chatrdPlaySound(soundFile, soundVolume);
+    });
+
+    //bindTikTokSettings();
 }
 
 async function bindTikTokSettings() {
-    const serviceEl = document.querySelector('[data-setting=tiktokService]');
-    const userEl = document.querySelector('[data-setting="tiktoksUser"]');
-    const apiKeyEl = document.querySelector('[data-setting="tiktokTikToolsApiKey"]');
 
-    const updateTiktokService = () => {
+    document.querySelector(`[data-setting=tiktokService]`).addEventListener('change', async () => {
+        document.querySelectorAll('[data-tiktok-service]').forEach((el) => {
+            el.style.display = 'none';
+        });
+
+        document.querySelectorAll(`[data-tiktok-service="${service}"]`).forEach((el) => {
+            el.style.display = '';
+        });
+    });
+
+    document.querySelector(`#tiktokSaveInformation`).addEventListener('click', async (event) => {
+        event.preventDefault();
+        
+        const serviceEl = document.querySelector('[data-setting=tiktokService]');
+        const userEl = document.querySelector('[data-setting="tiktoksUser"]');
+        const apiKeyEl = document.querySelector('[data-setting="tiktokTikToolsApiKey"]');
+
         setChatRDTiktokService(serviceEl.value, userEl.value, apiKeyEl.value);
-    };
 
-    serviceEl.addEventListener('change', updateTiktokService);
-    userEl.addEventListener('input', updateTiktokService);
-    apiKeyEl.addEventListener('input', updateTiktokService);
+        const btn = event.currentTarget; // o botão de fato
+        const previousButtonContent = btn.textContent;
+        btn.textContent = '👍';
+        btn.classList.add('success');
+
+        setTimeout(() => {
+            btn.textContent = previousButtonContent;
+            btn.classList.remove('success');
+        }, 3000);
+    });
 }
 
 async function importChatRDSettings(url) {
@@ -1019,4 +1040,3 @@ await loadWithProgress(async (pct) => {
         }, 30000);
     }
 });
-
