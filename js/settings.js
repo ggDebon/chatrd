@@ -88,8 +88,8 @@ async function loadChatRDSettings() {
 
     console.debug('[ChatRD][Settings] Widget Settings Loaded on Local Storage onto the Settings.', settings);
     
-    const url = await getChatRDUrl();
-    document.querySelector('#chatRDPreview').src = url + `&preview=true`;
+    const url = await getChatRDUrl({ preview: true });
+    document.querySelector('#chatRDPreview').src = url;
     
 }
 
@@ -216,12 +216,12 @@ async function bindChatRDSettings() {
 		el.dataset.bound = 'true';
 		el.addEventListener('input', async () => {
             const settings = await collectChatRDSettings();
-            const url = await getChatRDUrl();
+            const url = await getChatRDUrl({ preview: true });
 
             localStorage.setItem('chatrdWidgetSettings', JSON.stringify(settings));
             console.debug('[ChatRD][Settings] Widget Settings Saved on Local Storage.', settings);
             
-            document.querySelector('#chatRDPreview').src = url + `&preview=true`;
+            document.querySelector('#chatRDPreview').src = url;
 
             streamerBotConnect();
             speakerBotConnect();
@@ -354,11 +354,11 @@ async function importChatRDSettings(url) {
     //loadChatRDSettings();
 }
 
-async function getChatRDUrl() {
+async function getChatRDUrl({ preview = false } = {}) {
 	const base = new URL(window.location.href);
 
 	base.hash = "";
-    
+
 	if (!base.pathname.endsWith("chat.html")) {
 		if (base.pathname.endsWith("/") || base.pathname === "") {
 			base.pathname += "chat.html";
@@ -376,6 +376,10 @@ async function getChatRDUrl() {
 	Object.entries(settings).forEach(([key, value]) => {
 		base.searchParams.set(key, value);
 	});
+
+	if (preview) {
+		base.searchParams.set("preview", "true");
+	}
 
 	return base.toString();
 }
