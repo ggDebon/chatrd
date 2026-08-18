@@ -71,7 +71,8 @@ body {
 /* --------------------------- */
 
 .chat.noscrollbar {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
 }
 
 .chat::-webkit-scrollbar {

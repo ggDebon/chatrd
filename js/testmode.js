@@ -1,6 +1,6 @@
 const testModeAutoStart     = getURLParam("testMode", false);
 const testModeMinInterval   = parseInt(getURLParam("testModeMinInterval", 1500), 10);
-const testModeMaxInterval   = parseInt(getURLParam("testModeMaxInterval", 2500), 10);
+const testModeMaxInterval   = parseInt(getURLParam("testModeMaxInterval", 1500), 10);
 
 const TestMode = (() => {
 

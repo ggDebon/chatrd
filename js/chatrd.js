@@ -97,11 +97,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=54",
-    nutting: "skin-nutting.css?nocache=54",
-    kimballs: "skin-kimballs.css?nocache=54",
-    bubbles: "skin-bubbles.css?nocache=54",
-    'star-wars': "skin-star-wars.css?nocache=54"
+    default: "skin-default.css?nocache=55",
+    nutting: "skin-nutting.css?nocache=55",
+    kimballs: "skin-kimballs.css?nocache=55",
+    bubbles: "skin-bubbles.css?nocache=55",
+    'star-wars': "skin-star-wars.css?nocache=55"
 };
 
 
