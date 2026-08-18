@@ -254,7 +254,7 @@
     "shares": "Compartidos",
     "gifts": "Regalos",
     "superfans": "SuperFans/Suscriptores",
-    "fanclub_tag": "Etiqueta de club de fans",
+    "fanclub_tag": "<i class=\"ri-corner-down-right-line\"></i> Etiqueta de club de fans",
     "statistics": "Estadísticas",
     "statistics_hint": "Muestra los espectadores y Me gusta de TikTok",
     "role_selection": "Roles de Speaker.bot",

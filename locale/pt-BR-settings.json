@@ -254,7 +254,7 @@
 		"shares": "Compartilhamentos",
 		"gifts": "Presentes",
 		"superfans": "SuperFãs/Assinantes",
-    	"fanclub_tag": "Etiqueta do Fã Clube",
+    	"fanclub_tag": "<i class=\"ri-corner-down-right-line\"></i> Etiqueta do Fã Clube",
 		"statistics": "Estatísticas",
 		"statistics_hint": "Mostra Espectadores e Curtidas do TikTok",
 		"role_selection": "Cargos do Speaker.bot",

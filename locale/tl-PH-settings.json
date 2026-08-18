@@ -254,7 +254,7 @@
     "shares": "Mga Share",
     "gifts": "Mga Regalo",
     "superfans": "SuperFans/Mga Subscriber",
-    "fanclub_tag": "Fan Club Tag",
+    "fanclub_tag": "<i class=\"ri-corner-down-right-line\"></i> Fan Club Tag",
     "statistics": "Mga Istatistika",
     "statistics_hint": "Ipinapakita ang mga manonood at like sa TikTok",
     "role_selection": "Mga Role sa Speaker.bot",

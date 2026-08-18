@@ -254,7 +254,7 @@
     "shares": "Partages",
     "gifts": "Cadeaux",
     "superfans": "SuperFans/Abonnés",
-    "fanclub_tag": "Tag du fan club",
+    "fanclub_tag": "<i class=\"ri-corner-down-right-line\"></i> Tag du fan club",
     "statistics": "Statistiques",
     "statistics_hint": "Affiche les spectateurs et les mentions J'aime TikTok",
     "role_selection": "Rôles Speaker.bot",

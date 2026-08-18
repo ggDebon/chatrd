@@ -254,7 +254,7 @@
     "shares": "Shares",
     "gifts": "Gifts",
     "superfans": "SuperFans/Subscribers",
-    "fanclub_tag": "Fan Club Tag",
+    "fanclub_tag": "<i class=\"ri-corner-down-right-line\"></i> Fan Club Tag",
     "statistics": "Statistics",
     "statistics_hint": "Shows TikTok Viewers and Likes",
     "role_selection": "Speaker.bot Roles",
