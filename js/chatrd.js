@@ -97,11 +97,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=51",
-    nutting: "skin-nutting.css?nocache=51",
-    kimballs: "skin-kimballs.css?nocache=51",
-    bubbles: "skin-bubbles.css?nocache=51",
-    'star-wars': "skin-star-wars.css?nocache=51"
+    default: "skin-default.css?nocache=52",
+    nutting: "skin-nutting.css?nocache=52",
+    kimballs: "skin-kimballs.css?nocache=52",
+    bubbles: "skin-bubbles.css?nocache=52",
+    'star-wars': "skin-star-wars.css?nocache=52"
 };
 
 
@@ -115,9 +115,72 @@ chatRDBody.style.fontFamily = chatFontFamily;
 
 if (outline) chatContainer.classList.add('outline');
 
+
+
+
+
+
+
 if (showPlatformStatistics == true) {
     statistics.style.display = '';
+
+    const combinedViewersHtml = `
+        <div class="platform" id="combine-viewers" style="display: none;">
+            <span class="viewers"><i class="fa-solid fa-user"></i> <span>0</span></span>
+        </div>
+    `;
+
+    statistics.insertAdjacentHTML('afterbegin', combinedViewersHtml);
+
+    if (combineViewers) {
+        statistics.classList.add('combined');
+        document.querySelector('#combine-viewers').style.display = '';
+    }
+
 }
+
+
+async function combinedViewerStatistics() {
+
+    if (combineViewers) {
+
+        if (statistics.children.length > 0) {
+
+            const combineTargetSpan = statistics.querySelector('#combine-viewers .viewers > span');
+
+            if (!combineTargetSpan) {
+                return;
+            }
+
+            const viewerNumberSpans = statistics.querySelectorAll(
+                '.platform:not(#combine-viewers) .viewers > span'
+            );
+
+            let total = 0;
+
+            viewerNumberSpans.forEach(span => {
+                const rawValue = span.getAttribute('data-viewers');
+                const value = rawValue ? parseInt(rawValue.trim(), 10) : NaN;
+
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+
+            combineTargetSpan.textContent = formatNumber(total);
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
 
 if (scrollbar == false) { chatContainer.classList.add('noscrollbar'); }
 if (chatOneLine == true && !chatHorizontal) {
@@ -1615,56 +1678,6 @@ function applyKeyboardShortcuts() {
     });
 }
 
-
-async function combinedViewerStatistics() {
-
-    const combinedViewersHtml = `
-        <div class="platform" id="combine-viewers" style="">
-            <span class="viewers"><i class="fa-solid fa-user"></i> <span>0</span></span>
-        </div>
-    `;
-
-    const statisticsEl = document.querySelector('#statistics');
-    
-    statisticsEl.classList.add('combined');
-
-    if (statisticsEl && statisticsEl.children.length > 0) {
-
-        statisticsEl.insertAdjacentHTML('afterbegin', combinedViewersHtml);
-
-        const combineTargetSpan = statisticsEl.querySelector('#combine-viewers .viewers > span');
-        const viewerNumberSpans = statisticsEl.querySelectorAll(
-            '.platform:not(#combine-viewers) .viewers > span'
-        );
-
-        function updateCombinedViewers() {
-            let total = 0;
-
-            viewerNumberSpans.forEach(span => {
-                const value = parseInt(span.textContent.trim(), 10);
-                if (!isNaN(value)) {
-                    total += value;
-                }
-            });
-
-            combineTargetSpan.textContent = total;
-        }
-
-        updateCombinedViewers();
-
-        const observer = new MutationObserver(updateCombinedViewers);
-
-        viewerNumberSpans.forEach(span => {
-            observer.observe(span, {
-                characterData: true,
-                childList: true,
-                subtree: true
-            });
-        });
-    }
-
-}
-
 window.addEventListener('resize', () => {
     chatGhostResize();
     adjustScreenMediaQuery();
@@ -1712,9 +1725,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     applyKeyboardShortcuts();
 
     applyLanguageToItems();
-
-    if (combineViewers) {
-        combinedViewerStatistics();
-    }
 
 });

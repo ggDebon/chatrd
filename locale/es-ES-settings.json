@@ -261,10 +261,10 @@
 		"service_provider": "Proveedor de Servicio",
 		"tiktok_user": "Usuario de TikTok",
 		"service_save_button": "Guardar Información del Servicio",
-		"service_save_button_hint": "Después de cambiar el Proveedor de Servicio, el Usuario de TikTok y/o la clave API de TikTools, es importante hacer clic en el botón <strong>Guardar Información del Servicio</strong>.",
+		"service_save_button_hint": "Después de cambiar el Proveedor de Servicio, el Usuario de TikTok y/o la clave API de EulerStream, es importante hacer clic en el botón <strong>Guardar Información del Servicio</strong>.",
 		"tikfinity_hint": "Para usar TikFinity, debes <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">descargar su aplicación de escritorio</a> y seguir las instrucciones. Para más información, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">mira el Tutorial</a>.",
-		"tiktools_warning": "<strong>ADVERTENCIA:</strong> Usar Tik.Tools es <strong><u>extremadamente experimental</u></strong> y tiene <strong><u>límites de uso</u>!</strong>",
-		"tiktools_hint": "Para usar Tik.Tools, debes crear una cuenta en <a href=\"https://tik.tools/\" target=\"_blank\">su sitio web</a> y usar la API KEY aquí. Además, <strong>vigila tu cuota diaria en <a href=\"https://tik.tools/dashboard\" target=\"_blank\">tu panel.</a><br>No cambies el nombre de usuario mientras estás en vivo o gastarás tus sesiones gratuitas.",
+		"eulerstream_warning": "<strong>ADVERTENCIA:</strong> Usar EulerStream es <strong><u>extremadamente experimental</u></strong> y tiene <strong><u>límites de uso</u>!</strong>",
+		"eulerstream_hint": "Para usar EulerStream, debes crear una cuenta en <a href=\"https://www.eulerstream.com/\" target=\"_blank\">su sitio web</a> y usar la API KEY aquí. Además, <strong>vigila tu cuota diaria en <a href=\"https://www.eulerstream.com/dashboard\" target=\"_blank\">tu panel.</a><br>No cambies el nombre de usuario mientras estás en vivo o gastarás tus sesiones gratuitas.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mods",

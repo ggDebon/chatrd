@@ -976,7 +976,12 @@ async function kickUpdateStatistics(data) {
     if (showPlatformStatistics == false || showKickViewers == false) return;
 
     const viewers = formatNumber(DOMPurify.sanitize(data.viewerCount))  || "0";
-    document.querySelector('#statistics #kick .viewers span').textContent = viewers;
+    const span = document.querySelector('#statistics #kick .viewers span');
+    
+    span.textContent = viewers;
+    span.dataset.viewers = data.viewerCount;
+
+    combinedViewerStatistics();
 }
 
 

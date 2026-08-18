@@ -261,10 +261,10 @@
 		"service_provider": "Fornitore di Servizio",
 		"tiktok_user": "Nome Utente TikTok",
 		"service_save_button": "Salva Informazioni sul Servizio",
-		"service_save_button_hint": "Dopo aver modificato il Provider di Servizio, il Nome Utente TikTok e/o la chiave API di TikTools, è importante fare clic sul pulsante <strong>Salva Informazioni sul Servizio</strong>.",
+		"service_save_button_hint": "Dopo aver modificato il Provider di Servizio, il Nome Utente TikTok e/o la chiave API di EulerStream, è importante fare clic sul pulsante <strong>Salva Informazioni sul Servizio</strong>.",
 		"tikfinity_hint": "Per usare TikFinity, devi <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">scaricare la loro app desktop</a> e seguire le istruzioni. Per maggiori informazioni, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">guarda il Tutorial</a>.",
-		"tiktools_warning": "<strong>ATTENZIONE:</strong> Usare Tik.Tools è <strong><u>estremamente sperimentale</u></strong> e ha <strong><u>limiti di frequenza</u>!</strong>",
-		"tiktools_hint": "Per usare Tik.Tools, devi creare un account sul <a href=\"https://tik.tools/\" target=\"_blank\">loro sito</a> e usare qui l'API KEY. Inoltre, <strong>tieni d'occhio la tua quota giornaliera sulla <a href=\"https://tik.tools/dashboard\" target=\"_blank\">tua dashboard.</a><br>Non cambiare il nome utente sopra durante una diretta, altrimenti consumerai le tue sessioni gratuite.",
+		"eulerstream_warning": "<strong>ATTENZIONE:</strong> Usare EulerStream è <strong><u>estremamente sperimentale</u></strong> e ha <strong><u>limiti di frequenza</u>!</strong>",
+		"eulerstream_hint": "Per usare EulerStream, devi creare un account sul <a href=\"https://www.eulerstream.com/\" target=\"_blank\">loro sito</a> e usare qui l'API KEY. Inoltre, <strong>tieni d'occhio la tua quota giornaliera sulla <a href=\"https://www.eulerstream.com/dashboard\" target=\"_blank\">tua dashboard.</a><br>Non cambiare il nome utente sopra durante una diretta, altrimenti consumerai le tue sessioni gratuite.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mods",

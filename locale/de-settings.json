@@ -261,10 +261,10 @@
 		"service_provider": "Dienstanbieter",
 		"tiktok_user": "TikTok-Benutzername",
 		"service_save_button": "Dienstinformationen Speichern",
-		"service_save_button_hint": "Nachdem du den Dienstanbieter, den TikTok-Benutzernamen und/oder den TikTools-API-Schlüssel geändert hast, ist es wichtig, auf die Schaltfläche <strong>Dienstinformationen Speichern</strong> zu klicken.",
+		"service_save_button_hint": "Nachdem du den Dienstanbieter, den TikTok-Benutzernamen und/oder den EulerStream-API-Schlüssel geändert hast, ist es wichtig, auf die Schaltfläche <strong>Dienstinformationen Speichern</strong> zu klicken.",
 		"tikfinity_hint": "Um TikFinity zu nutzen, musst du <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">deren Desktop-App herunterladen</a> und den Anweisungen folgen. Für weitere Informationen <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">sieh dir das Tutorial an</a>.",
-		"tiktools_warning": "<strong>ACHTUNG:</strong> Die Nutzung von Tik.Tools ist <strong><u>extrem experimentell</u></strong> und hat <strong><u>Ratenbegrenzungen</u>!</strong>",
-		"tiktools_hint": "Um Tik.Tools zu nutzen, musst du auf <a href=\"https://tik.tools/\" target=\"_blank\">deren Website</a> ein Konto erstellen und den API-Schlüssel hier verwenden. Behalte außerdem <strong>dein tägliches Kontingent in <a href=\"https://tik.tools/dashboard\" target=\"_blank\">deinem Dashboard</a> im Auge.<br>Ändere den obigen Benutzernamen nicht während eines Livestreams, sonst verbrauchst du deine kostenlosen Sitzungen.",
+		"eulerstream_warning": "<strong>ACHTUNG:</strong> Die Nutzung von EulerStream ist <strong><u>extrem experimentell</u></strong> und hat <strong><u>Ratenbegrenzungen</u>!</strong>",
+		"eulerstream_hint": "Um EulerStream zu nutzen, musst du auf <a href=\"https://www.eulerstream.com/\" target=\"_blank\">deren Website</a> ein Konto erstellen und den API-Schlüssel hier verwenden. Behalte außerdem <strong>dein tägliches Kontingent in <a href=\"https://www.eulerstream.com/dashboard\" target=\"_blank\">deinem Dashboard</a> im Auge.<br>Ändere den obigen Benutzernamen nicht während eines Livestreams, sonst verbrauchst du deine kostenlosen Sitzungen.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mods",

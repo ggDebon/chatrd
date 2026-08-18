@@ -1255,7 +1255,12 @@ async function twitchUpdateStatistics(data) {
     if (showPlatformStatistics == false || showTwitchViewers == false) return;
 
     const viewers = formatNumber(DOMPurify.sanitize(data.viewerCount))  || "0";
-    document.querySelector('#statistics #twitch .viewers span').textContent = viewers;
+    const span = document.querySelector('#statistics #twitch .viewers span');
+    
+    span.textContent = viewers;
+    span.dataset.viewers = data.viewerCount;
+
+    combinedViewerStatistics();
 }
 
 

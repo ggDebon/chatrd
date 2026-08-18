@@ -17,7 +17,11 @@ const showTikTokLikes               = getURLParam("showTikTokLikes", false);
 const showTikTokShares              = getURLParam("showTikTokShares", false);
 const showTikTokGifts               = getURLParam("showTikTokGifts", true);
 const showTikTokSubs                = getURLParam("showTikTokSubs", true);
+const tiktokFanClubTag              = getURLParam("tiktokFanClubTag", "");
 const showTikTokStatistics          = getURLParam("showTikTokStatistics", true);
+
+let tiktokStatistics = {};
+//let tiktokRoomInfo = null;
 
 const tiktokGiftsClasses = [
     { min: 1,  max: 9, class: 'normal-gift' },
@@ -48,7 +52,18 @@ const tiktokMessageHandlers = {
         }*/
 
         if (response.data?.data?.eventName === 'TikTok.EulerStream') {
-            console.debug(`[ChatRD][TikTok][EulerStream][${response.data.data.event.type}]`, response.data.data.event.data);
+            const type = response.data.data.event.type;
+            const data = response.data.data.event.data;
+
+            console.debug(`[ChatRD][TikTok][EulerStream][${type}]`, data);
+
+            switch (type) {
+                case 'WebcastChatMessage': tiktokChatMessageFromEulerStream(data); break;
+                case 'WebcastRoomUserSeqMessage': tiktokUpdateStatisticsFromEulerStream(data, 'viewers'); break;
+                case 'WebcastLikeMessage': tiktokUpdateStatisticsFromEulerStream(data, 'likes'); break;
+                case 'WebcastGiftMessage': tiktokGiftMessageFromEulerStream(data); break;
+                //case 'roomInfo': tiktokRoomInfoFromEulerStream(data); break;
+            }
         }
     }
 
@@ -75,10 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
         waitForStreamerBot('TikTok').then(() => {
             if (tiktokService == 'tikfinity') {
                 tiktokConnection();
+                //registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
             }
-            if (tiktokService == 'tiktools') {
+            /*if (tiktokService == 'tiktools') {
                 registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
-            }
+            }*/
             if (tiktokService == 'eulerstream') {
                 registerPlatformHandlersToStreamerBot(tiktokMessageHandlers, '[ChatRD][TikTok][Streamer.bot]');
             }
@@ -199,6 +215,26 @@ async function tiktokConnection() {
 // ---------------------------
 // TIKTOK UTILITY FUNCTIONS
 
+/*async function tiktokRoomInfoFromEulerStream(data) {
+    const tiktokRoomInfo = JSON.stringify(data);
+    localStorage.setItem("tiktokRoomInfo", tiktokRoomInfo);
+}
+
+async function loadTiktokRoomInfoFromEulerStream() {
+    const stored = localStorage.getItem("tiktokRoomInfo");
+
+    if (!stored) return null;
+
+    try {
+        return JSON.parse(stored);
+    }
+    
+    catch (err) {
+        console.warn("[ChatRD][TikTok][EulerStream] Failed to parse stored tiktokRoomInfo:", err);
+        return null;
+    }
+}*/
+
 async function tiktokChatMessage(data) {
     
     if (!data?.comment) { data.comment = " "; }
@@ -270,6 +306,88 @@ async function tiktokChatMessage(data) {
 
     if (roles.length == 0) roles.push('user');
     classes.push(...roles);
+
+    message.textContent = data.comment;
+    await getTikTokEmotes(data, message),
+
+    addMessageItem('tiktok', clone, classes, userId, messageId);
+}
+
+async function tiktokChatMessageFromEulerStream(data) {
+    
+    if (!data?.comment) { data.comment = " "; }
+    if (showTikTokMessages == false) return;
+    if (ignoreUserList.includes(data.user.uniqueId.toLowerCase())) return;
+    if (data.comment.startsWith("!") && excludeCommands == true) return;
+
+	const template = chatTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        'first-message': firstMessage,
+        'shared-chat': sharedChat,
+        
+        header,
+        timestamp,
+        platform,
+        badges,
+        avatar,
+        pronouns: pronoun,
+        user,
+        
+        reply,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'msg'];
+    
+    const avatarImage = data.user.profilePicture.urls[0]
+    const badgesHTML = await getTikTokBadgesFromEulerStream(data);
+
+    /*const [avatarImage,  badgesHTML, roles] = await Promise.all([
+        getTikTokAvatar(data),
+        getTikTokBadgesFromEulerStream(data),
+        getTiktokRoles(data)
+    ]);
+
+    if (data.uniqueId === data.tikfinityUsername) roles.push('streamer');
+    if (data.isModerator) roles.push('moderator');
+    if (data.isSubscriber) roles.push('subscriber');*/
+
+    header.remove();
+    firstMessage.remove();
+
+    sharedChat.remove();
+    reply.remove();
+    pronoun.remove();
+
+    if (showAvatar) avatar.innerHTML = `<img src="${avatarImage}">`; else avatar.remove();
+    
+    if (showBadges) {
+        if (!badgesHTML) { badges.remove(); }
+        else { badges.innerHTML = badgesHTML; }
+     }
+    else { badges.remove(); }
+
+    var color = await createRandomColor('tiktok', data.user.uniqueId);
+
+
+    const userLinkElement = user.querySelector('a');
+    const userLink = `https://tiktok.com/@${data.user.uniqueId}`;
+
+    userLinkElement.href = userLink;
+    userLinkElement.target = '_blank';
+    userLinkElement.style = `--user-color: ${color}`;
+    userLinkElement.textContent = data.user.nickname;
+    userLinkElement.title = `${data.user.nickname} @ ${userLink}`;
+
+    /*if (roles.length == 0) roles.push('user');
+    classes.push(...roles);*/
 
     message.textContent = data.comment;
     await getTikTokEmotes(data, message),
@@ -553,6 +671,54 @@ async function tiktokGiftMessage(data) {
     addEventItem('tiktok', clone, classes, userId, messageId);
 }
 
+async function tiktokGiftMessageFromEulerStream(data) {
+
+    if (showTikTokGifts == false) return;
+    if (data.giftDetails.giftType === 1 && !data.repeatEnd) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'gift'];
+
+    header.remove();
+
+    let coins = Math.floor(data.repeatCount*data.giftDetails.diamondCount);
+
+    const tikTokGiftMatch = tiktokGiftsClasses.find(lv => coins >= lv.min && coins <= lv.max);
+    classes.push(tikTokGiftMatch.class);
+
+    user.textContent = data.user.nickname;
+    action.innerHTML = tRD('tiktok.gift_action', { count: data.repeatCount, name: data.giftDetails.giftName });
+
+    const rotateDeg = (Math.random() * 60 - 30).toFixed(1) + 'deg';
+
+    const giftHtml = renderGiftEventSuffix({
+        image : `<img style="--rotateGift: ${rotateDeg}" src="${data.giftDetails.giftImage.giftPictureUrl}" alt="${data.giftDetails.giftName}">`, 
+        value : `<img src="js/modules/tiktok/images/icon-tiktokcoin.svg" alt="Coins"> ${coins}`
+    });
+
+    value.innerHTML = giftHtml;
+
+    message.remove();
+
+    addEventItem('tiktok', clone, classes, userId, messageId);
+}
+
 
 
 async function getTikTokEmotes(data, messageElement) {
@@ -675,6 +841,7 @@ async function getTikTokBadges(data) {
                     badgesHTML.push(
                         `<span class="${badgeClasses}">
                             <img src="${match.url}" alt="Level ${badge.level}">
+                            <em> ${tiktokFanClubTag}</em>
                         </span>`
                     );
                 }
@@ -685,6 +852,101 @@ async function getTikTokBadges(data) {
     badgesHTML = badgesHTML.filter(Boolean).join('');
     return badgesHTML;
 }
+
+async function getTikTokBadgesFromEulerStream(data) {
+
+    const isModerator = data.userIdentity.isModeratorOfAnchor;
+    const isSubscriber = data.userIdentity.isSubscriberOfAnchor;
+    const userBadges = data.user.badges;
+
+    //if (tiktokRoomInfo == null) tiktokRoomInfo = await loadTiktokRoomInfoFromEulerStream();
+
+    let badgesHTML = [
+        isModerator && '<span class="badge mod"><i class="fa-solid fa-user-gear"></i></span>',
+    ];
+    
+    const badgesLevelEight = [
+        { min: 1,  max: 4,  url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv1_v1.png~tplv-obj.image' },
+        { min: 5,  max: 9,  url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv5_v1.png~tplv-obj.image' },
+        { min: 10, max: 14, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv10_v1.png~tplv-obj.image' },
+        { min: 15, max: 19, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv15_v2.png~tplv-obj.image' },
+        { min: 20, max: 24, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv20_v1.png~tplv-obj.image' },
+        { min: 25, max: 29, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv25_v1.png~tplv-obj.image' },
+        { min: 30, max: 34, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv30_v1.png~tplv-obj.image' },
+        { min: 35, max: 39, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv35_v3.png~tplv-obj.image' },
+        { min: 40, max: 44, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv40_v2.png~tplv-obj.image' },
+        { min: 45, max: 49, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv45_v1.png~tplv-obj.image' },
+        { min: 50, max: 500, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/grade_badge_icon_lite_lv50_v1.png~tplv-obj.image' },
+    ];
+
+    const badgesLevelTen = [
+        { min: 1,  max: 9,  url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv1_v4.png~tplv-obj.image' },
+        { min: 10, max: 19,  url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv10_v4.png~tplv-obj.image' },
+        { min: 20, max: 29, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv20_v4.png~tplv-obj.image' },
+        { min: 30, max: 39, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv30_v4.png~tplv-obj.image' },
+        { min: 40, max: 49, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv40_v4.png~tplv-obj.image' },
+        { min: 50, max: 500, url: 'https://p16-webcast.tiktokcdn.com/webcast-va/fans_badge_icon_lv50_v4.png~tplv-obj.image' },
+    ];
+
+    if ((userBadges) && (userBadges.length > 0)) {
+        userBadges.forEach(badge => {
+            // Top Gifter Badges
+            const rankIndex = tiktokStatistics?.topViewers
+                ?.slice(0, 3)
+                .findIndex(viewer => viewer.user.uniqueId === data.user.uniqueId);
+
+            const rankLabel = rankIndex >= 0 ? rankIndex + 1 : ' ';
+
+            if (badge.badgeSceneType === 6 && badge.imageBadges?.length > 0) {
+                const imageBadge = badge.imageBadges[0]
+                badgesHTML.push(
+                    `<span class="badge top-gifter">
+                        <img src="${imageBadge.image.url}" alt="${imageBadge.displayType}">
+                        <em>No. ${rankLabel}</em>
+                    </span>`
+                );
+            }
+
+            // Scene Eight - Grade Badges
+            if (badge.badgeSceneType === 8) {
+                const level = badge.privilegeLogExtra.level;
+                const match = badgesLevelEight.find(lv => level >= lv.min && level <= lv.max);
+                if (match) {
+                    badgesHTML.push(
+                        `<span class="badge sceneEight">
+                            <img src="${match.url}" alt="Level ${level}">
+                            <em> ${level}</em>
+                        </span>`
+                    );
+                }
+            }
+
+            // Scene Ten - Fan Badges
+            if (badge.badgeSceneType === 10) {
+
+                let badgeClasses = ['badge', 'sceneTen'];
+                badgeClasses = badgeClasses.join(" ");
+                
+                const level = badge.privilegeLogExtra.level;
+                const match = badgesLevelTen.find(lv => level >= lv.min && level <= lv.max);
+                if (match) {
+                    badgesHTML.push(
+                        `<span class="${badgeClasses}">
+                            <img src="${match.url}" alt="Level ${level}">
+                            <em> ${tiktokFanClubTag}</em>
+                        </span>`
+                    );
+                }
+            }
+        });
+    }
+
+    badgesHTML = badgesHTML.filter(Boolean).join('');
+    return badgesHTML;
+}
+
+
+
 
 async function getTiktokRoles(data) {
 
@@ -708,7 +970,7 @@ async function getTiktokRoles(data) {
     if (userBadges?.length > 0) {
         userBadges.forEach(badge => {
             // Top Gifter Badges
-            if (badge.badgeSceneType === 6) rolesArray.push(`top-gifter-${badge.displayType}`);
+            if (badge.badgeSceneType === 6) rolesArray.push(`top-gifter-${data.topGifterRank}`);
 
             // Scene Ten - Fan Badges
             if (badge.badgeSceneType === 10) {
@@ -733,7 +995,37 @@ async function tiktokUpdateStatistics(data, type) {
 
     if (type == 'viewers') {
         const viewers = formatNumber(DOMPurify.sanitize(data.viewerCount)) || "0";
-        document.querySelector('#statistics #tiktok .viewers span').textContent = viewers;
+        const span = document.querySelector('#statistics #tiktok .viewers span');
+        
+        span.textContent = viewers;
+        span.dataset.viewers = data.viewerCount;
+        
+        combinedViewerStatistics();
+    }
+
+    if (type == 'likes') {
+        const likes = formatNumber(DOMPurify.sanitize(data.totalLikeCount)) || "0";
+        document.querySelector('#statistics #tiktok .likes span').textContent = likes;
+    }
+    
+}
+
+
+
+
+async function tiktokUpdateStatisticsFromEulerStream(data, type) {
+    
+    if (showPlatformStatistics == false || showTikTokStatistics == false) return;
+
+    if (type == 'viewers') {
+        tiktokStatistics = data;
+        const viewers = formatNumber(DOMPurify.sanitize(data.viewerCount)) || "0";
+        const span = document.querySelector('#statistics #tiktok .viewers span');
+        
+        span.textContent = viewers;
+        span.dataset.viewers = data.viewerCount;
+        
+        combinedViewerStatistics();
     }
 
     if (type == 'likes') {

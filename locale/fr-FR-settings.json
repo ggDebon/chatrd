@@ -261,10 +261,10 @@
 		"service_provider": "Fournisseur de Service",
 		"tiktok_user": "Nom d'Utilisateur TikTok",
 		"service_save_button": "Enregistrer les Informations du Service",
-		"service_save_button_hint": "Après avoir modifié le Fournisseur de Service, le Nom d'utilisateur TikTok et/ou la clé API TikTools, il est important de cliquer sur le bouton <strong>Enregistrer les Informations du Service</strong>.",
+		"service_save_button_hint": "Après avoir modifié le Fournisseur de Service, le Nom d'utilisateur TikTok et/ou la clé API EulerStream, il est important de cliquer sur le bouton <strong>Enregistrer les Informations du Service</strong>.",
 		"tikfinity_hint": "Pour utiliser TikFinity, tu dois <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">télécharger leur application de bureau</a> et suivre les instructions. Pour plus d'informations, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">regarde le Tutoriel</a>.",
-		"tiktools_warning": "<strong>ATTENTION :</strong> L'utilisation de Tik.Tools est <strong><u>extrêmement expérimentale</u></strong> et comporte des <strong><u>limites de requêtes</u> !</strong>",
-		"tiktools_hint": "Pour utiliser Tik.Tools, tu dois créer un compte sur <a href=\"https://tik.tools/\" target=\"_blank\">leur site</a> et utiliser la clé API ici. Aussi, <strong>surveille ton quota quotidien sur <a href=\"https://tik.tools/dashboard\" target=\"_blank\">ton tableau de bord.</a><br>Ne change pas le nom d'utilisateur ci-dessus pendant un live, sinon tu vas gaspiller tes sessions gratuites.",
+		"eulerstream_warning": "<strong>ATTENTION :</strong> L'utilisation de EulerStream est <strong><u>extrêmement expérimentale</u></strong> et comporte des <strong><u>limites de requêtes</u> !</strong>",
+		"eulerstream_hint": "Pour utiliser EulerStream, tu dois créer un compte sur <a href=\"https://www.eulerstream.com/\" target=\"_blank\">leur site</a> et utiliser la clé API ici. Aussi, <strong>surveille ton quota quotidien sur <a href=\"https://www.eulerstream.com/dashboard\" target=\"_blank\">ton tableau de bord.</a><br>Ne change pas le nom d'utilisateur ci-dessus pendant un live, sinon tu vas gaspiller tes sessions gratuites.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Mods",

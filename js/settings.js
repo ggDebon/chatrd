@@ -105,27 +105,27 @@ async function loadChatRDTiktokService() {
 
     const tiktokServiceUsedSelected = document.querySelector('[data-setting=tiktokService]').value;
     const tiktokServiceUserInput = document.querySelector('[data-setting=tiktoksUser]').value;
-    const tiktokServiceApiKeyInput = document.querySelector('[data-setting=tiktokTikToolsApiKey]').value;
+    const tiktokServiceApiKeyInput = document.querySelector('[data-setting=tiktokEulerStreamApiKey]').value;
 
     try {
         console.debug('[ChatRD][Settings][TikTok] Grabbing TikTok Service Variable...');
         tiktokServiceUsed = await streamerBot.client.getGlobal('chatrdTiktokService', true);
         tiktokServiceUser = await streamerBot.client.getGlobal('chatrdTiktokUser', true);
-        tiktokServiceApiKey = await streamerBot.client.getGlobal('chatrdTikToolsApiKey', true);
+        tiktokServiceApiKey = await streamerBot.client.getGlobal('chatrdEulerStreamApiKey', true);
 
         if (!tiktokServiceUsed || !tiktokServiceUser || !tiktokServiceApiKey) {
             throw new Error('[ChatRD][Settings][TikTok] TikTok Service Variables not found.');
         }
 
         document.querySelector('[data-setting=tiktoksUser]').value = tiktokServiceUser.variable.value;
-        document.querySelector('[data-setting=tiktokTikToolsApiKey]').value = tiktokServiceApiKey.variable.value;
+        document.querySelector('[data-setting=tiktokEulerStreamApiKey]').value = tiktokServiceApiKey.variable.value;
     }
 
     catch (err) {
         console.warn('[ChatRD][Settings][TikTok] TikTok Service Variables not found. Creating them...');
 
         await streamerBot.client.doAction({
-        name: "[TikTok][TikTools] Connection" },
+        name: "[TikTok][EulerStream] Connection" },
         {
             "chatrdTiktokFunction": "SaveSettings(service,user,apiKey)",
             "service": tiktokServiceUsedSelected,
@@ -147,7 +147,7 @@ async function setChatRDTiktokService(service, user, apiKey) {
     }
     
     await streamerBot.client.doAction({
-        name: "[TikTok][TikTools] Connection" },
+        name: "[TikTok][EulerStream] Connection" },
         {
             "chatrdTiktokFunction": "SaveSettings(service,user,apiKey)",
             "service": service,
@@ -242,7 +242,9 @@ async function bindChatRDSettings() {
 
 async function bindTikTokSettings() {
 
-    document.querySelector(`[data-setting=tiktokService]`).addEventListener('change', async () => {
+    document.querySelector(`[data-setting=tiktokService]`).addEventListener('change', async (event) => {
+        const service = event.target.value;
+        
         document.querySelectorAll('[data-tiktok-service]').forEach((el) => {
             el.style.display = 'none';
         });
@@ -257,11 +259,11 @@ async function bindTikTokSettings() {
         
         const serviceEl = document.querySelector('[data-setting=tiktokService]');
         const userEl = document.querySelector('[data-setting="tiktoksUser"]');
-        const apiKeyEl = document.querySelector('[data-setting="tiktokTikToolsApiKey"]');
+        const apiKeyEl = document.querySelector('[data-setting="tiktokEulerStreamApiKey"]');
 
         setChatRDTiktokService(serviceEl.value, userEl.value, apiKeyEl.value);
 
-        const btn = event.currentTarget; // o botão de fato
+        const btn = event.currentTarget;
         const previousButtonContent = btn.textContent;
         btn.textContent = '👍';
         btn.classList.add('success');

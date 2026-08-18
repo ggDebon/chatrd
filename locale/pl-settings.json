@@ -261,10 +261,10 @@
 		"service_provider": "Dostawca Usługi",
 		"tiktok_user": "Nazwa Użytkownika TikTok",
 		"service_save_button": "Zapisz Informacje o Usłudze",
-		"service_save_button_hint": "Po zmianie Dostawcy Usługi, Nazwy Użytkownika TikTok i/lub klucza API TikTools, ważne jest kliknięcie przycisku <strong>Zapisz Informacje o Usłudze</strong>.",
+		"service_save_button_hint": "Po zmianie Dostawcy Usługi, Nazwy Użytkownika TikTok i/lub klucza API EulerStream, ważne jest kliknięcie przycisku <strong>Zapisz Informacje o Usłudze</strong>.",
 		"tikfinity_hint": "Aby korzystać z TikFinity, musisz <a href=\"https://tikfinity.zerody.one/app/\" target=\"_blank\">pobrać ich aplikację desktopową</a> i postępować zgodnie z instrukcjami. Aby uzyskać więcej informacji, <a href=\"https://youtu.be/udV_VARURgU?si=TCAznTq2HktvSyK9&t=103\" target=\"_blank\">obejrzyj Samouczek</a>.",
-		"tiktools_warning": "<strong>UWAGA:</strong> Korzystanie z Tik.Tools jest <strong><u>bardzo eksperymentalne</u></strong> i ma <strong><u>limity zapytań</u>!</strong>",
-		"tiktools_hint": "Aby korzystać z Tik.Tools, musisz założyć konto na <a href=\"https://tik.tools/\" target=\"_blank\">ich stronie</a> i użyć tutaj klucza API. Poza tym <strong>pilnuj swojego dziennego limitu na <a href=\"https://tik.tools/dashboard\" target=\"_blank\">swoim dashboardzie.</a><br>Nie zmieniaj nazwy użytkownika powyżej podczas transmisji na żywo, bo stracisz swoje darmowe sesje.",
+		"eulerstream_warning": "<strong>UWAGA:</strong> Korzystanie z EulerStream jest <strong><u>bardzo eksperymentalne</u></strong> i ma <strong><u>limity zapytań</u>!</strong>",
+		"eulerstream_hint": "Aby korzystać z EulerStream, musisz założyć konto na <a href=\"https://www.eulerstream.com/\" target=\"_blank\">ich stronie</a> i użyć tutaj klucza API. Poza tym <strong>pilnuj swojego dziennego limitu na <a href=\"https://www.eulerstream.com/dashboard\" target=\"_blank\">swoim dashboardzie.</a><br>Nie zmieniaj nazwy użytkownika powyżej podczas transmisji na żywo, bo stracisz swoje darmowe sesje.",
 		"tts_roles": {
 			"streamer": "Streamer",
 			"moderator": "Moderatorzy",

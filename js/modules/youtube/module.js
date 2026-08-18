@@ -606,6 +606,7 @@ async function youTubeAddStatistics(data) {
             document.querySelector(`#${elementId} .title`).textContent = title;
         }
     }
+
     else if (status == 'complete') {
         const streamelement = document.querySelector(`#${elementId}`);
         streamelement.remove();
@@ -616,7 +617,6 @@ async function youTubeAddStatistics(data) {
             document.querySelector('#statistics').insertAdjacentHTML('beforeend', youtubeStatistics);
             document.querySelector('#youtube').style.display = '';
         }
-        
     }
 }
 
@@ -634,10 +634,16 @@ async function youTubeUpdateStatistics(data) {
         id: id,
         title: data.broadcast.title,
         tags: data.broadcast.tags
-    })
+    });
 
-    document.querySelector(`#statistics #youtubeStream-${id} .viewers span`).textContent = formatNumber(viewers);
+    const span = document.querySelector(`#statistics #youtubeStream-${id} .viewers span`);
+
+    span.textContent = viewers;
+    span.dataset.viewers = data.concurrentViewers;
+
     document.querySelector(`#statistics #youtubeStream-${id} .likes span`).textContent = formatNumber(likes);
+
+    combinedViewerStatistics();
 }
 
 
