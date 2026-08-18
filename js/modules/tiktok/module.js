@@ -824,7 +824,7 @@ async function getTikTokBadges(data) {
                     badgesHTML.push(
                         `<span class="badge sceneEight">
                             <img src="${match.url}" alt="Level ${badge.level}">
-                            <em> ${badge.level}</em>
+                            <em>${badge.level}</em>
                         </span>`
                     );
                 }
@@ -841,7 +841,7 @@ async function getTikTokBadges(data) {
                     badgesHTML.push(
                         `<span class="${badgeClasses}">
                             <img src="${match.url}" alt="Level ${badge.level}">
-                            <em> ${tiktokFanClubTag}</em>
+                            <em>${tiktokFanClubTag}</em>
                         </span>`
                     );
                 }
@@ -915,7 +915,7 @@ async function getTikTokBadgesFromEulerStream(data) {
                     badgesHTML.push(
                         `<span class="badge sceneEight">
                             <img src="${match.url}" alt="Level ${level}">
-                            <em> ${level}</em>
+                            <em>${level}</em>
                         </span>`
                     );
                 }
@@ -933,7 +933,7 @@ async function getTikTokBadgesFromEulerStream(data) {
                     badgesHTML.push(
                         `<span class="${badgeClasses}">
                             <img src="${match.url}" alt="Level ${level}">
-                            <em> ${tiktokFanClubTag}</em>
+                            <em>${tiktokFanClubTag}</em>
                         </span>`
                     );
                 }
