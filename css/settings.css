@@ -291,7 +291,7 @@ header h1 {
 
 
 #settings .config.full wa-button {
-    margin: 10px 0 0 0;
+    margin: 0;
     width: 100%;
 }
 
@@ -299,6 +299,17 @@ header h1 {
     background-color: #292929;
     border: 1px solid transparent;
     transition: var(--transition);
+}
+
+#settings .config.full wa-button.needs-saving::part(base) {
+    animation: buttonNeedsSaving 1s infinite;
+    --wa-button-border-color: #dbb048;
+}
+
+@keyframes buttonNeedsSaving {
+    0% { transform: scale(1); box-shadow: 0 0 0 transparent; }
+    50% { transform: scale(1.01); box-shadow: 0 0 10px var(--wa-button-border-color); }
+    100% { transform: scale(1); box-shadow: 0 0 0 transparent; }
 }
 
 #settings .config.full wa-button::part(base):hover {
@@ -444,6 +455,10 @@ header h1 {
 #settings wa-details#kofi wa-switch:state(checked)::part(control) { background-color: #72a5f2; }
 #settings wa-details#fourthwall wa-switch:state(checked)::part(control) { background-color: #0042ff; }
 
+
+#settings wa-details#tiktok wa-button.needs-saving::part(base) {
+    --wa-button-border-color: #ff2a55;
+}
 
 
 

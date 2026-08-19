@@ -12,6 +12,7 @@ const showTimestamps                = getURLParam("showTimestamps", true);
 const ampm                          = getURLParamLegacy("ampmTimeStamps", () => getURLParam("ampm", false));
 const showBadges                    = getURLParam("showBadges", true);
 const showPlatformStatistics        = getURLParam("showPlatformStatistics", true);
+const combineViewers                = getURLParam("combineViewers", false);
 
 const chatThreshold                 = 100;
 const chatOneLine                   = getURLParam("chatOneLine", false);
@@ -30,6 +31,8 @@ const playSoundOnChat               = getURLParam("playSoundOnChat", false);
 const playSoundOnEvents             = getURLParam("playSoundOnEvents", false);
 const playSoundVolume               = getURLParam("playSoundVolume", 0.5);
 const playSoundFile                 = getURLParam("playSoundFile", "retro-game");
+const playMsgBatch                  = getURLParam("playMsgBatch", 1);
+const playMsgSilence                = getURLParam("playMsgSilence", 1);
 
 const chatBackground                = getURLParam("chatBackground", "#121212"); 
 const chatBackgroundOpacity         = getURLParam("chatBackgroundOpacity", 0); 
@@ -74,7 +77,7 @@ const kickTTSRoles           = getURLParam("kickTTSRoles", "user");
 const tiktokTTSRoles         = getURLParam("tiktokTTSRoles", "user");
 
 const imageEmbeddingFilter   = getURLParam("imageEmbeddingFilter", false);
-const imageEmbeddingFilterDomains   = getURLParam("imageEmbeddingFilterDomains", "*");
+const imageEmbeddingFilterDomains   = getURLParam("imageEmbeddingFilterDomains", "");
 
 
 
@@ -94,11 +97,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=49",
-    nutting: "skin-nutting.css?nocache=49",
-    kimballs: "skin-kimballs.css?nocache=49",
-    bubbles: "skin-bubbles.css?nocache=49",
-    'star-wars': "skin-star-wars.css?nocache=49"
+    default: "skin-default.css?nocache=58´",
+    nutting: "skin-nutting.css?nocache=58´",
+    kimballs: "skin-kimballs.css?nocache=58´",
+    bubbles: "skin-bubbles.css?nocache=58´",
+    'star-wars': "skin-star-wars.css?nocache=58´"
 };
 
 
@@ -112,9 +115,72 @@ chatRDBody.style.fontFamily = chatFontFamily;
 
 if (outline) chatContainer.classList.add('outline');
 
+
+
+
+
+
+
 if (showPlatformStatistics == true) {
     statistics.style.display = '';
+
+    const combinedViewersHtml = `
+        <div class="platform" id="combine-viewers" style="display: none;">
+            <span class="viewers"><i class="fa-solid fa-user"></i> <span>0</span></span>
+        </div>
+    `;
+
+    statistics.insertAdjacentHTML('afterbegin', combinedViewersHtml);
+
+    if (combineViewers) {
+        statistics.classList.add('combined');
+        document.querySelector('#combine-viewers').style.display = '';
+    }
+
 }
+
+
+async function combinedViewerStatistics() {
+
+    if (combineViewers) {
+
+        if (statistics.children.length > 0) {
+
+            const combineTargetSpan = statistics.querySelector('#combine-viewers .viewers > span');
+
+            if (!combineTargetSpan) {
+                return;
+            }
+
+            const viewerNumberSpans = statistics.querySelectorAll(
+                '.platform:not(#combine-viewers) .viewers > span'
+            );
+
+            let total = 0;
+
+            viewerNumberSpans.forEach(span => {
+                const rawValue = span.getAttribute('data-viewers');
+                const value = rawValue ? parseInt(rawValue.trim(), 10) : NaN;
+
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+
+            combineTargetSpan.textContent = formatNumber(total);
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
 
 if (scrollbar == false) { chatContainer.classList.add('noscrollbar'); }
 if (chatOneLine == true && !chatHorizontal) {
@@ -151,6 +217,53 @@ if (chatField) {
     const chatfieldelement = document.getElementById("chat-input");
     chatfieldelement.style.display = '';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let pendingNotificationCount = 0;
+let notificationSilenceTimer = null;
+
+function queueNotificationSound() {
+    pendingNotificationCount++;
+
+    if (notificationSilenceTimer) {
+        clearTimeout(notificationSilenceTimer);
+    }
+
+    if (pendingNotificationCount === 1) {
+        chatrdPlaySound(playSoundFile, playSoundVolume);
+    }
+    else if (pendingNotificationCount >= playMsgBatch) {
+        chatrdPlaySound(playSoundFile, playSoundVolume);
+        pendingNotificationCount = 0;
+    }
+
+    notificationSilenceTimer = setTimeout(() => {
+        if (pendingNotificationCount > 1) {
+            chatrdPlaySound(playSoundFile, playSoundVolume);
+        }
+        pendingNotificationCount = 0;
+        notificationSilenceTimer = null;
+    }, Math.floor(playMsgSilence * 1000));
+}
+
+
+
+
+
+
+
 
 
 
@@ -254,8 +367,6 @@ async function animateItemEntry(root, messageid) {
 		}
 	}
 }
-
-
 
 function buildChatModerationHTML(platform, userid, messageid, streamerOfOrigin) {
     switch (platform) {
@@ -361,7 +472,7 @@ function addMessageItem(platform, clone, classes, userid, messageid) {
     animateItemEntry(root, messageid);
 
     if (playSound && playSoundOnChat) {
-        chatrdPlaySound(playSoundFile, playSoundVolume);
+        queueNotificationSound();
     }
 
 }
@@ -416,9 +527,19 @@ function addEventItem(platform, clone, classes, userid, messageid) {
     animateItemEntry(root, messageid);
     
     if (playSound && playSoundOnEvents) {
-        chatrdPlaySound(playSoundFile, playSoundVolume);
+        queueNotificationSound();
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 async function preloadAndPrepend(container, fragment) {
     const tempDiv = document.createElement('div');
@@ -947,7 +1068,6 @@ async function executeModCommand(event, command) {
 
 function parseAllowedDomains(filterList) {
 	const trimmedFilter = filterList.trim();
-	if (trimmedFilter === '*') return '*';
 
 	return trimmedFilter
 		.split(',')
@@ -962,7 +1082,6 @@ function parseAllowedDomains(filterList) {
 
 
 function isDomainAllowed(rawUrl, domains) {
-	if (domains === '*') return true;
 	if (!domains || domains.length === 0) return false;
 
 	let hostname;
@@ -983,7 +1102,6 @@ function isDomainAllowed(rawUrl, domains) {
 		return tail.join('.') === domain;
 	});
 }
-
 
 const allowedImageDomains = imageEmbeddingFilter
 	? parseAllowedDomains(imageEmbeddingFilterDomains)

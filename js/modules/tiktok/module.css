@@ -3,7 +3,7 @@
 /* --------------------------- */
 
 #statistics .platform#tiktok {
-    order: 3;
+    order: 4;
     background: #242424;
 }
 
@@ -59,9 +59,15 @@
 .chat .item.tiktok span.badge.sceneEight em,
 .chat .item.tiktok span.badge.sceneTen em {
     display: inline-block;
-    padding: 0 3px 0 0;
+    padding: 0 3px 0 3px;
     font-style: normal;
     font-size: 11px;
+}
+
+.chat .item.tiktok span.badge.top-gifter em:empty,
+.chat .item.tiktok span.badge.sceneEight em:empty,
+.chat .item.tiktok span.badge.sceneTen em:empty {
+    padding: 0;
 }
 
 .chat .item.tiktok span.badge.top-gifter { background: rgba(254, 44, 85, 0.4); }

@@ -502,8 +502,8 @@ async function twitchWatchStreakMessage(data) {
 
     const template = eventTemplate;
 	const clone = template.content.cloneNode(true);
-    const messageId = data.msgId;
-    const userId = data.userName.toLowerCase();
+    const messageId = data.messageId;
+    const userId = data.user.login.toLowerCase();
 
     const {
         header,
@@ -521,8 +521,11 @@ async function twitchWatchStreakMessage(data) {
 
     header.remove();
 
-    const displayName = data.displayName ?? data.user.name;
-	const watchStreak = data.watchStreak ?? data.streak_count;
+    /*const displayName = data.displayName ?? data.user.name;
+	const watchStreak = data.watchStreak ?? data.streak_count;*/
+
+    const displayName = data.user.name;
+	const watchStreak = data.streak_count;
     
     const userLinkElement = user.querySelector('a');
     const userLink = `https://twitch.tv/${displayName.toLowerCase()}`;
@@ -531,7 +534,6 @@ async function twitchWatchStreakMessage(data) {
     userLinkElement.target = '_blank';
     userLinkElement.textContent = displayName;
     userLinkElement.title = `${displayName} @ ${userLink}`;
-
 
     action.innerHTML = tRD('twitch.watch_streak_action', { count: watchStreak });
     value.remove();
@@ -542,14 +544,14 @@ async function twitchWatchStreakMessage(data) {
     message.innerHTML = DOMPurify.sanitize(messageFromParts);
     */
 
+    /* 
     const hasParts = Array.isArray(data.parts) && data.parts.some(p => p.text || p.emote);
-    const messageContent = hasParts
-    ? await getTwitchMessageFromParts(data.parts)
-    : data.message
-        ? escapeHTML(data.message)
-        : escapeHTML(data.text);
+    const messageContent = hasParts ? await getTwitchMessageFromParts(data.parts) : data.message ? escapeHTML(data.message) : escapeHTML(data.text);
 
-    message.textContent = messageContent;
+    message.textContent = messageContent;*/
+
+    let messageFromParts = await getTwitchMessageFromParts(data.parts ?? []);
+    message.innerHTML = DOMPurify.sanitize(messageFromParts);
 
     addEventItem('twitch', clone, classes, userId, messageId);
 }
@@ -1253,7 +1255,12 @@ async function twitchUpdateStatistics(data) {
     if (showPlatformStatistics == false || showTwitchViewers == false) return;
 
     const viewers = formatNumber(DOMPurify.sanitize(data.viewerCount))  || "0";
-    document.querySelector('#statistics #twitch .viewers span').textContent = viewers;
+    const span = document.querySelector('#statistics #twitch .viewers span');
+    
+    span.textContent = viewers;
+    span.dataset.viewers = data.viewerCount;
+
+    combinedViewerStatistics();
 }
 
 

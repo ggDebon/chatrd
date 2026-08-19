@@ -422,7 +422,7 @@ async function youTubeGiftBombMessage(data) {
     action.innerHTML = tRD('youtube.giftbomb_action');
 
     var count = data.count > 1 ? tRD('youtube.giftbomb_plural') : tRD('youtube.giftbomb_singular');
-    value.innerHTML = `<strong>${data.count} ${count} (Tier ${data.tier})</strong>${tRD('youtube.giftbomb_suffix')}`;
+    value.innerHTML = `<strong>${data.count} ${count}</strong>${tRD('youtube.giftbomb_suffix')}`;
 
     message.remove();
 
@@ -465,12 +465,12 @@ async function youTubeGiftBombReceivedMessage(data) {
 
     
     const userLinkElement = user.querySelector('a');
-    const userLink = `${data.user.url}`;
+    const userLink = `${data.gifter.url}`;
 
     userLinkElement.href = userLink;
     userLinkElement.target = '_blank';
-    userLinkElement.textContent = data.user.name;
-    userLinkElement.title = `${data.user.name} @ ${userLink}`;
+    userLinkElement.textContent = data.gifter.name;
+    userLinkElement.title = `${data.gifter.name} @ ${userLink}`;
 
     
     action.innerHTML = tRD('youtube.giftbomb_received_action');
@@ -606,6 +606,7 @@ async function youTubeAddStatistics(data) {
             document.querySelector(`#${elementId} .title`).textContent = title;
         }
     }
+
     else if (status == 'complete') {
         const streamelement = document.querySelector(`#${elementId}`);
         streamelement.remove();
@@ -616,7 +617,6 @@ async function youTubeAddStatistics(data) {
             document.querySelector('#statistics').insertAdjacentHTML('beforeend', youtubeStatistics);
             document.querySelector('#youtube').style.display = '';
         }
-        
     }
 }
 
@@ -634,10 +634,16 @@ async function youTubeUpdateStatistics(data) {
         id: id,
         title: data.broadcast.title,
         tags: data.broadcast.tags
-    })
+    });
 
-    document.querySelector(`#statistics #youtubeStream-${id} .viewers span`).textContent = formatNumber(viewers);
+    const span = document.querySelector(`#statistics #youtubeStream-${id} .viewers span`);
+
+    span.textContent = viewers;
+    span.dataset.viewers = data.concurrentViewers;
+
     document.querySelector(`#statistics #youtubeStream-${id} .likes span`).textContent = formatNumber(likes);
+
+    combinedViewerStatistics();
 }
 
 
