@@ -31,7 +31,7 @@ const playSoundOnChat               = getURLParam("playSoundOnChat", false);
 const playSoundOnEvents             = getURLParam("playSoundOnEvents", false);
 const playSoundVolume               = getURLParam("playSoundVolume", 0.5);
 const playSoundFile                 = getURLParam("playSoundFile", "retro-game");
-const playMsgBatch                  = getURLParam("playSoundFile", 1);
+const playMsgBatch                  = getURLParam("playMsgBatch", 1);
 const playMsgSilence                = getURLParam("playMsgSilence", 1);
 
 const chatBackground                = getURLParam("chatBackground", "#121212"); 
@@ -97,11 +97,11 @@ const loadedEmotes = new Set();
 
 
 const SKINS = {
-    default: "skin-default.css?nocache=57",
-    nutting: "skin-nutting.css?nocache=57",
-    kimballs: "skin-kimballs.css?nocache=57",
-    bubbles: "skin-bubbles.css?nocache=57",
-    'star-wars': "skin-star-wars.css?nocache=57"
+    default: "skin-default.css?nocache=58´",
+    nutting: "skin-nutting.css?nocache=58´",
+    kimballs: "skin-kimballs.css?nocache=58´",
+    bubbles: "skin-bubbles.css?nocache=58´",
+    'star-wars': "skin-star-wars.css?nocache=58´"
 };
 
 
@@ -244,7 +244,7 @@ function queueNotificationSound() {
     if (pendingNotificationCount === 1) {
         chatrdPlaySound(playSoundFile, playSoundVolume);
     }
-    else if (pendingNotificationCount >= PlayMsgBatch) {
+    else if (pendingNotificationCount >= playMsgBatch) {
         chatrdPlaySound(playSoundFile, playSoundVolume);
         pendingNotificationCount = 0;
     }
@@ -255,7 +255,7 @@ function queueNotificationSound() {
         }
         pendingNotificationCount = 0;
         notificationSilenceTimer = null;
-    }, Math.floor(PlayMsgSilence * 1000));
+    }, Math.floor(playMsgSilence * 1000));
 }
 
 

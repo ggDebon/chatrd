@@ -7,8 +7,8 @@ const tikFinityStatus = {};
 
 const showTiktok                    = getURLParam("showTiktok", false);
 
-//const tiktokService                 = getURLParam("tiktokService", "tikfinity");
-const tiktokService                 = "tikfinity";
+const tiktokService                 = getURLParam("tiktokService", "tikfinity");
+//const tiktokService                 = "tikfinity";
 
 const showTikTokMessages            = getURLParam("showTikTokMessages", true);
 const showTikTokJoins               = getURLParam("showTikTokJoins", false);
@@ -59,9 +59,26 @@ const tiktokMessageHandlers = {
 
             switch (type) {
                 case 'WebcastChatMessage': tiktokChatMessageFromEulerStream(data); break;
+                case 'WebcastMemberMessage' : tiktokJoinMessageFromEulerStream(data); break;
                 case 'WebcastRoomUserSeqMessage': tiktokUpdateStatisticsFromEulerStream(data, 'viewers'); break;
-                case 'WebcastLikeMessage': tiktokUpdateStatisticsFromEulerStream(data, 'likes'); break;
+                case 'WebcastLikeMessage': tiktokLikesMessageFromEulerStream(data);  tiktokUpdateStatisticsFromEulerStream(data, 'likes'); break;
                 case 'WebcastGiftMessage': tiktokGiftMessageFromEulerStream(data); break;
+
+                
+                case 'WebcastSocialMessage':
+                    
+
+                    switch (data.event.eventDetails.displayType) {
+                        case "pm_main_follow_message_viewer_2": tiktokFollowMessageFromEulerStream(data); break;
+                        case "pm_mt_guidance_share": tiktokShareMessageFromEulerStream(data); break;
+                    }
+                    
+                    
+                break;
+
+                case 'subscribe': tiktokSubMessage(tiktokData); break;
+
+
                 //case 'roomInfo': tiktokRoomInfoFromEulerStream(data); break;
             }
         }
@@ -312,7 +329,6 @@ async function tiktokChatMessage(data) {
 
     addMessageItem('tiktok', clone, classes, userId, messageId);
 }
-
 async function tiktokChatMessageFromEulerStream(data) {
     
     if (!data?.comment) { data.comment = " "; }
@@ -348,16 +364,10 @@ async function tiktokChatMessageFromEulerStream(data) {
     
     const avatarImage = data.user.profilePicture.urls[0]
     const badgesHTML = await getTikTokBadgesFromEulerStream(data);
+    const roles = await getTiktokRolesFromEulerStream(data);
 
-    /*const [avatarImage,  badgesHTML, roles] = await Promise.all([
-        getTikTokAvatar(data),
-        getTikTokBadgesFromEulerStream(data),
-        getTiktokRoles(data)
-    ]);
-
-    if (data.uniqueId === data.tikfinityUsername) roles.push('streamer');
-    if (data.isModerator) roles.push('moderator');
-    if (data.isSubscriber) roles.push('subscriber');*/
+    if (data.userIdentity.isModeratorOfAnchor) roles.push('moderator');
+    if (data.userIdentity.isSubscriberOfAnchor) roles.push('subscriber');
 
     header.remove();
     firstMessage.remove();
@@ -386,8 +396,8 @@ async function tiktokChatMessageFromEulerStream(data) {
     userLinkElement.textContent = data.user.nickname;
     userLinkElement.title = `${data.user.nickname} @ ${userLink}`;
 
-    /*if (roles.length == 0) roles.push('user');
-    classes.push(...roles);*/
+    if (roles.length == 0) roles.push('user');
+    classes.push(...roles);
 
     message.textContent = data.comment;
     await getTikTokEmotes(data, message),
@@ -432,6 +442,40 @@ async function tiktokFollowMessage(data) {
 
     addEventItem('tiktok', clone, classes, userId, messageId);
 }
+async function tiktokFollowMessageFromEulerStream(data) {
+
+    if (showTikTokFollows == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'follow'];
+
+    header.remove();
+    message.remove();
+    value.remove();
+
+    
+    user.textContent = data.user.nickname;
+
+    action.innerHTML = tRD('tiktok.follow_action');
+
+    addEventItem('tiktok', clone, classes, userId, messageId);
+}
 
 
 async function tiktokShareMessage(data) {
@@ -462,6 +506,39 @@ async function tiktokShareMessage(data) {
     value.remove();
     
     user.textContent = data.nickname;
+
+    action.innerHTML = tRD('tiktok.share_action');
+
+    addEventItem('tiktok', clone, classes, userId, messageId);
+}
+async function tiktokShareMessageFromEulerStream(data) {
+
+    if (showTikTokShares == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'share'];
+
+    header.remove();
+    message.remove();
+    value.remove();
+    
+    user.textContent = data.user.nickname;
 
     action.innerHTML = tRD('tiktok.share_action');
 
@@ -520,6 +597,57 @@ async function tiktokJoinMessage(data) {
     chatContainer.prepend(joinParent);
 
 }
+async function tiktokJoinMessageFromEulerStream(data) {
+    
+    if (showTikTokJoins == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'join'];
+
+    header.remove();
+    message.remove();
+    value.remove();
+
+    user.textContent = data.user.nickname;
+    action.innerHTML = tRD('tiktok.join_action');
+    
+    const joinElement = [...chatContainer.querySelectorAll(".event.tiktok.join")].at(-1);
+    
+    if (!joinElement) {
+        addEventItem('tiktok', clone, classes, userId, messageId);
+        return;
+    };
+
+    const joinParent = joinElement.parentNode;
+    const messageElement = joinElement.querySelector('.message');
+
+    const animateClass = (chatHorizontal == true) ? 'animate__fadeInRight' : 'animate__fadeInUp';
+
+    joinElement.dataset.user = userId;
+    joinElement.id = messageId;
+    joinElement.querySelector('span.user').textContent = data.user.nickname;
+
+    messageElement.classList.add('animate__animated', 'animate__faster', animateClass);
+    
+    chatContainer.prepend(joinParent);
+
+}
 
 
 
@@ -568,6 +696,62 @@ async function tiktokLikesMessage(data) {
         header.remove();
         
         user.textContent = data.nickname;
+        action.innerHTML = tRD('tiktok.likes_action');
+
+        var likes = likeCountTotal > 1 ? tRD('tiktok.likes_plural') : tRD('tiktok.likes_singular');
+        value.innerHTML = `<strong>${likeCountTotal}</strong> ${likes} ❤️`;
+
+        message.remove();
+
+        addEventItem('tiktok', clone, classes, userId, messageId);
+
+    }
+}
+async function tiktokLikesMessageFromEulerStream(data) {
+
+    if (showTikTokLikes == false) return;
+
+    const template = eventTemplate;
+	const clone = template.content.cloneNode(true);
+    const messageId = data.event.msgId;
+    const userId = data.user.userId;
+
+    const {
+        header,
+        platform,
+        user,
+        action,
+        value,
+        'actual-message': message
+    } = Object.fromEntries(
+        [...clone.querySelectorAll('[class]')]
+            .map(el => [el.className, el])
+    );
+
+    const classes = ['tiktok', 'likes'];
+
+    var likeCountTotal = parseInt(data.likeCount);
+    
+    const previousLikeContainer = chatContainer.querySelector(`div.event.tiktok.likes[data-user="${data.user.userId}"]`);
+    const previousLikeContainerParent = previousLikeContainer?.parentNode;
+
+    if (previousLikeContainer) {
+        const likeCountElem = previousLikeContainer.querySelector('.value strong');
+        const animateClass = (chatHorizontal == true) ? 'animate__fadeInRight' : 'animate__fadeInUp';
+
+        previousLikeContainerParent.classList.add('animate__animated', 'animate__faster', animateClass);
+        if (likeCountElem) {
+            var likeCountPrev = parseInt(likeCountElem.textContent);
+            likeCountTotal = Math.floor(likeCountPrev + likeCountTotal);
+            likeCountElem.textContent = likeCountTotal;
+            chatContainer.prepend(previousLikeContainerParent);
+        }
+    }
+    else {
+
+        header.remove();
+        
+        user.textContent = data.user.nickname;
         action.innerHTML = tRD('tiktok.likes_action');
 
         var likes = likeCountTotal > 1 ? tRD('tiktok.likes_plural') : tRD('tiktok.likes_singular');
@@ -670,7 +854,6 @@ async function tiktokGiftMessage(data) {
 
     addEventItem('tiktok', clone, classes, userId, messageId);
 }
-
 async function tiktokGiftMessageFromEulerStream(data) {
 
     if (showTikTokGifts == false) return;
@@ -774,6 +957,8 @@ async function getTikTokAvatar(data) {
     return profilePictureUrl;
 }
 
+
+
 async function getTikTokBadges(data) {
     const { isSubscriber, isModerator, userBadges } = data;
 
@@ -852,7 +1037,6 @@ async function getTikTokBadges(data) {
     badgesHTML = badgesHTML.filter(Boolean).join('');
     return badgesHTML;
 }
-
 async function getTikTokBadgesFromEulerStream(data) {
 
     const isModerator = data.userIdentity.isModeratorOfAnchor;
@@ -985,6 +1169,48 @@ async function getTiktokRoles(data) {
 
     return rolesArray;
 }
+async function getTiktokRolesFromEulerStream(data) {
+
+    const rolesArray = [];
+    
+    const userBadges = data.user.badges;
+
+    const badgesLevelTen = [
+        { min: 1,  max: 9,  class: 'fan-one fan-ten fan-twenty fan-thirty fan-forty fan-fifty' },
+        { min: 10, max: 19, class: 'fan-ten fan-twenty fan-thirty fan-forty fan-fifty' },
+        { min: 20, max: 29, class: 'fan-twenty fan-thirty fan-forty fan-fifty' },
+        { min: 30, max: 39, class: 'fan-thirty fan-forty fan-fifty' },
+        { min: 40, max: 49, class: 'fan-forty fan-fifty' },
+        { min: 50, max: 500, class: 'fan-fifty' },
+    ];
+
+    if (userBadges?.length > 0) {
+        userBadges.forEach(badge => {
+            // Top Gifter Badges
+            if (badge.badgeSceneType === 6 && badge.imageBadges?.length > 0) {
+                const rankIndex = tiktokStatistics?.topViewers
+                    ?.slice(0, 3)
+                    .findIndex(viewer => viewer.user.uniqueId === data.user.uniqueId);
+
+                const rankLabel = rankIndex >= 0 ? rankIndex + 1 : ' ';
+
+                rolesArray.push(`top-gifter-${rankLabel}`);
+            }
+
+            // Scene Ten - Fan Badges
+            if (badge.badgeSceneType === 10) {
+                const level = badge.privilegeLogExtra.level;
+                const match = badgesLevelTen.find(lv => level >= lv.min && level <= lv.max);
+                if (match) {
+                    const classArrays = match.class.split(' ');
+                    rolesArray.push(...classArrays);
+                }
+            }
+        });
+    }
+
+    return rolesArray;
+}
 
 
 
@@ -1009,10 +1235,6 @@ async function tiktokUpdateStatistics(data, type) {
     }
     
 }
-
-
-
-
 async function tiktokUpdateStatisticsFromEulerStream(data, type) {
     
     if (showPlatformStatistics == false || showTikTokStatistics == false) return;

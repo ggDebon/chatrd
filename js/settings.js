@@ -237,13 +237,28 @@ async function bindChatRDSettings() {
         await chatrdPlaySound(soundFile, soundVolume);
     });
 
-    //bindTikTokSettings();
+    bindTikTokSettings();
 }
 
 async function bindTikTokSettings() {
 
     document.querySelector(`[data-setting=tiktokService]`).addEventListener('change', async (event) => {
+        
         const service = event.target.value;
+        const button = document.querySelector(`#tiktokSaveInformation`);
+        
+        let previousButtonContent;
+
+        if (button.classList.contains('needs-saving')) {
+            previousButtonContent = button.dataset.text;
+        }
+        else {
+            previousButtonContent = button.querySelector('span').textContent;
+        }
+
+        button.classList.add('needs-saving');
+        button.dataset.text = `${previousButtonContent}`;
+        button.textContent = `🙏 ${previousButtonContent} 🙏`
         
         document.querySelectorAll('[data-tiktok-service]').forEach((el) => {
             el.style.display = 'none';
@@ -264,7 +279,17 @@ async function bindTikTokSettings() {
         setChatRDTiktokService(serviceEl.value, userEl.value, apiKeyEl.value);
 
         const btn = event.currentTarget;
-        const previousButtonContent = btn.textContent;
+        
+        let previousButtonContent;
+
+        if (btn.classList.contains('needs-saving')) {
+            btn.classList.remove('needs-saving');
+            previousButtonContent = btn.dataset.text;
+        }
+        else {
+            previousButtonContent = btn.querySelector('span').textContent;
+        }
+
         btn.textContent = '👍';
         btn.classList.add('success');
 
@@ -619,7 +644,7 @@ async function streamerBotConnect() {
             status.classList.add('connected');
 
             loadYoutubeMemberEmotes();
-            //loadChatRDTiktokService();
+            loadChatRDTiktokService();
             renderActionsStatus();
         },
         onDisconnect: () => {
