@@ -422,7 +422,7 @@ async function youTubeGiftBombMessage(data) {
     action.innerHTML = tRD('youtube.giftbomb_action');
 
     var count = data.count > 1 ? tRD('youtube.giftbomb_plural') : tRD('youtube.giftbomb_singular');
-    value.innerHTML = `<strong>${data.count} ${count} (Tier ${data.tier})</strong>${tRD('youtube.giftbomb_suffix')}`;
+    value.innerHTML = `<strong>${data.count} ${count}</strong>${tRD('youtube.giftbomb_suffix')}`;
 
     message.remove();
 
@@ -465,12 +465,12 @@ async function youTubeGiftBombReceivedMessage(data) {
 
     
     const userLinkElement = user.querySelector('a');
-    const userLink = `${data.user.url}`;
+    const userLink = `${data.gifter.url}`;
 
     userLinkElement.href = userLink;
     userLinkElement.target = '_blank';
-    userLinkElement.textContent = data.user.name;
-    userLinkElement.title = `${data.user.name} @ ${userLink}`;
+    userLinkElement.textContent = data.gifter.name;
+    userLinkElement.title = `${data.gifter.name} @ ${userLink}`;
 
     
     action.innerHTML = tRD('youtube.giftbomb_received_action');
