@@ -127,6 +127,8 @@
     "channel_points": "Récompenses de points de chaîne",
     "powerups": "Échanges de Power-up",
     "powerups_enable": "<i class=\"ri-corner-down-right-line\"></i> Activer les effets de Power-up",
+    "powerups_notifications": "<i class=\"ri-corner-down-right-line\"></i> Activer les Notifications de Bonus",
+    "powerups_notifications_hint": "Désactivez cette option si vous voulez uniquement les effets, sans notifications d'événements",
     "raids": "Raids",
     "shared_chat": "Chat partagé",
     "pronouns": "Pronoms",

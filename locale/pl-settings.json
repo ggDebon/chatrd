@@ -127,6 +127,8 @@
     "channel_points": "Nagrody za punkty kanału",
     "powerups": "Wykorzystane Power-upy",
     "powerups_enable": "<i class=\"ri-corner-down-right-line\"></i> Włącz efekty Power-up",
+    "powerups_notifications": "<i class=\"ri-corner-down-right-line\"></i> Włącz Powiadomienia o Power-upach",
+    "powerups_notifications_hint": "Wyłącz tę opcję, jeśli chcesz tylko efekty, bez powiadomień o zdarzeniach",
     "raids": "Rajdy",
     "shared_chat": "Wspólny czat",
     "pronouns": "Zaimki",

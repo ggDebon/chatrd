@@ -127,6 +127,8 @@
     "channel_points": "Kanalpunkte-Belohnungen",
     "powerups": "Power-up-Einlösungen",
     "powerups_enable": "<i class=\"ri-corner-down-right-line\"></i> Power-up-Effekte aktivieren",
+    "powerups_notifications": "<i class=\"ri-corner-down-right-line\"></i> Power-up-Benachrichtigungen aktivieren",
+    "powerups_notifications_hint": "Deaktiviere dies, wenn du nur die Effekte möchtest, ohne Ereignisbenachrichtigungen",
     "raids": "Raids",
     "shared_chat": "Geteilter Chat",
     "pronouns": "Pronomen",

@@ -127,6 +127,8 @@
     "channel_points": "Channel Point Rewards",
     "powerups": "Mga Power-up Redemption",
     "powerups_enable": "<i class=\"ri-corner-down-right-line\"></i> I-enable ang mga Epekto ng Power-up",
+    "powerups_notifications": "<i class=\"ri-corner-down-right-line\"></i> I-enable ang Power-up Notifications",
+    "powerups_notifications_hint": "I-disable ito kung gusto mo lang ang mga effect, nang walang event notifications",
     "raids": "Mga Raid",
     "shared_chat": "Shared Chat",
     "pronouns": "Mga Panghalip",
